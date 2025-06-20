@@ -10,6 +10,7 @@ import axios from 'axios'
 import { Loader2, Sparkle } from 'lucide-react'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { useRouter } from 'next/navigation'
 
 function AddNewCourse({children}) {
 
@@ -25,23 +26,35 @@ function AddNewCourse({children}) {
     });
     const onHandleChange = (field, value) => {
         setFormdata(prev => ({...prev, [field]: value}));
-        console.log(formdata);
+    }
+
+    const validateForm = () => {
+      // Basic validation: all fields except description must be filled
+      const { name, noOfChapters, level, category } = formdata;
+      if (!name || !noOfChapters || !level || !category) {
+        alert('Please fill all required fields.');
+        return false;
+      }
+      return true;
     }
 
     const onGenerate = async () => { 
-      console.log(formdata);
+      if (!validateForm()) return;
       const courseId = uuidv4();
        try{
          setIsLoading(true);
         const result = await axios.post("/api/generate-course-layout", {
           ...formdata,
+          noOfChapters: Number(formdata.noOfChapters), // Ensure number
           courseId:courseId
         })
         console.log(result.data);
         setIsLoading(false);
+        router.push('/workspace/edit-course/' + result.data?.courseId);
        } catch (error) { 
         setIsLoading(false);
         console.log(error);
+        alert(error?.response?.data?.error || 'An error occurred while creating the course.');
        }
     }   
 
@@ -64,7 +77,7 @@ function AddNewCourse({children}) {
        </div>
        <div className='flex flex-col gap-2'>
         <Label className='text-lg font-bold'>No. of Chapters</Label>
-        <Input type="number" placeholder="No. of Chapters" onChange={(e) => onHandleChange("noOfChapters", e?.target.value)} />
+        <Input type="number" placeholder="No. of Chapters" onChange={(e) => onHandleChange("noOfChapters", Number(e?.target.value))} />
        </div>
        <div className='flex items-center gap-5'>
         <Label className='text-lg font-bold'>Include Video</Label>  <Switch className= "items-end"  onCheckedChange= {() => onHandleChange("includeVideo", !formdata?.includeVideo)} />
