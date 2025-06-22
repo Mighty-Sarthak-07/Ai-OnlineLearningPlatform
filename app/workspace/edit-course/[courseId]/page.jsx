@@ -5,7 +5,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
+import CourseInfo from '../_components/CourseInfo';
 
 function EditCourse() {
     const {courseId} = useParams();
@@ -20,7 +20,8 @@ function EditCourse() {
         setLoading(true);
         const response = await axios.get('/api/courses?courseId='+courseId);
         console.log(response.data);
-        setLoading(false);
+        setCourse(response.data);
+        setLoading(false);  
     }
     
 
@@ -31,13 +32,7 @@ function EditCourse() {
             <div className='w-full'>
                 <AppHeader/>
                 <div className='p-10'>
-                    EditCourse {courseId}
-                    <div className='flex flex-col gap-4'>
-                        <div className='flex flex-col gap-2'>
-                            <label htmlFor='title'>Title</label>
-                            <input type='text' id='title' className='border border-gray-300 rounded-md p-2' />
-                        </div>
-                    </div>
+                    <CourseInfo course={course}/>
                 </div>
             </div>
         </SidebarProvider>

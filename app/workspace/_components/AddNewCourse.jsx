@@ -8,13 +8,14 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import axios from 'axios'
 import { Loader2, Sparkle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { useRouter } from 'next/navigation'
 
 function AddNewCourse({children}) {
 
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
     const [formdata, setFormdata] = useState({
         name: "",
