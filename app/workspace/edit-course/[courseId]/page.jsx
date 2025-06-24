@@ -26,7 +26,7 @@ function EditCourse() {
     
 
   return (
-    <div>
+    <div className='bg-gradient-to-r from-slate-25 to-slate-50 via-slate-100'>
         <SidebarProvider>
             <AppSidebar/>
             <div className='w-full'>
