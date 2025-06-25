@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import CourseInfo from '../_components/CourseInfo';
+import ChapterTopicList from '../_components/ChapterTopicList';
 
 function EditCourse() {
     const {courseId} = useParams();
@@ -31,8 +32,9 @@ function EditCourse() {
             <AppSidebar/>
             <div className='w-full'>
                 <AppHeader/>
-                <div className='p-10'>
+                <div className='p-10 flex flex-col gap-4'>
                     <CourseInfo course={course}/>
+                    <ChapterTopicList course={course}/>
                 </div>
             </div>
         </SidebarProvider>

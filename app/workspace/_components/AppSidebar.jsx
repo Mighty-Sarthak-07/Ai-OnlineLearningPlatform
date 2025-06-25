@@ -68,7 +68,7 @@ function AppSidebar() {
     <SidebarContent>
       <SidebarGroup>
         <AddNewCourse>
-            <Button>
+            <Button className='bg-gradient-to-r from-purple-500 to-indigo-500 hover:scale-[1.05] hover:shadow-lg ease-in-out duration-300 hover:text-white flex items-center gap-2 ml-4'>
                 Create New Course
             </Button>
         </AddNewCourse>
