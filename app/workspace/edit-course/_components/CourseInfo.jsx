@@ -4,12 +4,14 @@ import { motion } from 'framer-motion';
 import { BookOpen, BoxIcon, Clock, Loader2, TrendingUp } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 function CourseInfo({course}) {
 
     const courseLayout = course?.courseJson?.course;
     const [loading,setLoading] = useState(false);
+    const router = useRouter();
     const GetCourseContent = async () => {
       setLoading(true);
       try{
@@ -20,21 +22,17 @@ function CourseInfo({course}) {
         })
         console.log(result.data);
         setLoading(false);
+        router.replace(`/workspace`);
         toast.success("Course Content Generated Successfully");
       }catch(error){
         console.log(error);
         setLoading(false);
-        
-        // Handle different types of errors
         if (error.response) {
-          // Server responded with error status
           const errorMessage = error.response.data?.error || error.response.data?.details || 'Server error occurred';
           toast.error(`Error: ${errorMessage}`);
         } else if (error.request) {
-          // Network error
           toast.error("Network error: Please check your connection");
         } else {
-          // Other errors
           toast.error("An unexpected error occurred");
         }
       }
