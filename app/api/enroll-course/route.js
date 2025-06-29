@@ -26,7 +26,16 @@ export async function POST(req) {
 
 export async function GET(req) {
     const user = await currentUser();
+    const { searchParams } = new URL(req.url);
+    const courseId = searchParams?.get('courseId');
+    if (courseId) {
+const result = await db.select().from(coursesTable).innerJoin(enrollCoursesTable,eq(coursesTable.cid,enrollCoursesTable.cid)).where(and(eq(enrollCoursesTable.userEmail, user.primaryEmailAddress?.emailAddress),eq(enrollCoursesTable.cid,courseId)));
+
+   return NextResponse.json({ message: "Enroll Courses", data: result[0] });
+    }
+    else{
    const result = await db.select().from(coursesTable).innerJoin(enrollCoursesTable,eq(coursesTable.cid,enrollCoursesTable.cid)).where(eq(enrollCoursesTable.userEmail, user.primaryEmailAddress?.emailAddress)).orderBy(desc(coursesTable.id));
 
    return NextResponse.json({ message: "Enroll Courses", data: result });
+    }
 }

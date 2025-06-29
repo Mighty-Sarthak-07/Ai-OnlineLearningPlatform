@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import CourseCard from './CourseCard';
+import EnrollCourseCard from './EnrollCourseCard';
 
 
 function EnrollCourseList() {
@@ -13,13 +13,17 @@ function EnrollCourseList() {
     const GetEnrollCourses = async () => {
         const result = await axios.get('/api/enroll-course');
         console.log(result.data);
-        setEnrollCourses(result.data);  
+        setEnrollCourses(result.data?.data);  
     }
-  return enrollCourses?.length > 0 && (
+  return  (
     <div>
         <h1 className='text-2xl font-bold'>Continue your Learning Process   </h1>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-           
+           {enrollCourses && enrollCourses.length > 0 ? enrollCourses.map((course,index) => (
+            <EnrollCourseCard key={index} course={course?.courses} enrollCourse={course?.enrollCourses} />
+           )) : (
+            <p>No enrolled courses found.</p>
+           )}
         </div>
     </div>
   ) 

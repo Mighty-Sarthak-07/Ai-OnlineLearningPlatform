@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import CourseInfo from '../_components/CourseInfo';
 import ChapterTopicList from '../_components/ChapterTopicList';
 
-function EditCourse() {
+function EditCourse({ViewCourse=false}) {
     const {courseId} = useParams();
     const [loading, setLoading] = useState(false);
     const [course,setCourse] = useState(null);
@@ -33,8 +33,8 @@ function EditCourse() {
             <div className='w-full'>
                 <AppHeader/>
                 <div className='p-10 flex flex-col gap-4'>
-                    <CourseInfo course={course}/>
-                    <ChapterTopicList course={course}/>
+                    <CourseInfo course={course} ViewCourse = {ViewCourse}/>
+                    <ChapterTopicList course={course} ViewCourse = {ViewCourse}/>
                 </div>
             </div>
         </SidebarProvider>

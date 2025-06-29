@@ -1,13 +1,14 @@
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { BookOpen, BoxIcon, Clock, Loader2, TrendingUp } from 'lucide-react';
+import { BookOpen, BoxIcon, Clock, Loader2, PlayCircleIcon, TrendingUp } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
-function CourseInfo({course}) {
+function CourseInfo({course,ViewCourse}) {
 
     const courseLayout = course?.courseJson?.course;
     const [loading,setLoading] = useState(false);
@@ -76,10 +77,15 @@ function CourseInfo({course}) {
                 <h2>{courseLayout?.level}</h2>
               </section>
             </div>
-            {loading ? <Loader2 className='w-10 h-10 text-purple-500 animate-spin'/> : null}
+            {!ViewCourse ?
              <Button className='text-lg mx-2 bg-gradient-to-r from-purple-500 to-indigo-500  hover:scale-[1.05] hover:shadow-lg ease-in-out duration-300 md:w-[250px] hover:text-white flex items-center gap-2' onClick={GetCourseContent} disabled={loading}>
-            <BoxIcon/> Generate Content
-          </Button>
+            {loading ? <Loader2 className='w-10 h-10 text-purple-500 animate-spin'/> : <BoxIcon/>} Generate Content
+            </Button> : <Link href={`/course/${course?.cid}`}>
+                <Button className='text-lg mx-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:scale-[1.05] hover:shadow-lg ease-in-out duration-300 md:w-[250px] hover:text-white flex items-center gap-2'>
+                  <PlayCircleIcon/> Continue Learning
+                </Button>
+              </Link>
+}
           </div>
          
         </motion.div>

@@ -3,10 +3,11 @@
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { UserButton } from '@clerk/nextjs'
 
-function AppHeader() {
+function AppHeader({hideSidebar = false}) {
   return (
     <div className='flex items-center justify-between p-4 shadow-sm'>  
-    <SidebarTrigger/>
+    
+    {!hideSidebar && <SidebarTrigger/>}
     <UserButton/>
     </div>
   )
