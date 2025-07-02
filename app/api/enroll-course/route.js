@@ -39,3 +39,32 @@ const result = await db.select().from(coursesTable).innerJoin(enrollCoursesTable
    return NextResponse.json({ message: "Enroll Courses", data: result });
     }
 }
+
+export async function PUT(req) {
+  try {
+    const { completedChapter, courseId } = await req.json();
+    const user = await currentUser();
+
+    if (!user || !courseId || !Array.isArray(completedChapter)) {
+      return NextResponse.json({ error: "Invalid request data" }, { status: 400 });
+    }
+
+    const result = await db
+      .update(enrollCoursesTable)
+      .set({
+        completedChapters: Array.from(new Set(completedChapter)),
+      })
+      .where(
+        and(
+          eq(enrollCoursesTable.userEmail, user.primaryEmailAddress?.emailAddress),
+          eq(enrollCoursesTable.cid, courseId)
+        )
+      )
+      .returning();
+
+    return NextResponse.json({ message: "Enroll Courses Updated", data: result });
+  } catch (error) {
+    console.error("PUT /api/enroll-course error:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}

@@ -3,9 +3,11 @@ import { useUser } from '@clerk/nextjs';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { UserdetailsContext } from '@/context/UserdetailsContext';
+import { SelectedChapterContext } from '@/context/SelectedChapterContext';
 function Provider({children}){
     const {user} = useUser();
     const [userDetails, setUserDetails] = useState();
+    const [selectedChapter, setSelectedChapter] = useState(0);
 
     useEffect(() => {
         if (user) {
@@ -31,9 +33,11 @@ function Provider({children}){
 
     return (
         <UserdetailsContext.Provider value={{userDetails, setUserDetails}}>
+            <SelectedChapterContext.Provider value={{selectedChapter, setSelectedChapter}}>
             <div>
                 {children}
             </div>
+            </SelectedChapterContext.Provider>
         </UserdetailsContext.Provider>
     )
 }
