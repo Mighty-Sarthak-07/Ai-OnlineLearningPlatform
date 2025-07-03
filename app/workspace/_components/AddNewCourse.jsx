@@ -10,6 +10,7 @@ import axios from 'axios'
 import { Loader2, Sparkle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
 
 function AddNewCourse({children}) {
@@ -50,6 +51,10 @@ function AddNewCourse({children}) {
           courseId:courseId
         })
         console.log(result.data);
+        if(result.data.response=='Premium access required'){
+          toast.warning('Premium access required');
+          router.push('/workspace/billing');
+        }
         setIsLoading(false);
         router.push('/workspace/edit-course/' + result.data?.courseId);
        } catch (error) { 

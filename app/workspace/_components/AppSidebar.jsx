@@ -28,7 +28,7 @@ const SidebarOptions = [
     {
         label: "My Learning",
         icon: BookOpenIcon,
-        path: "/workspace/my-courses",
+        path: "/workspace/my-learning",
     },
     {
         label: "Explore",

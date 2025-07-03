@@ -1,7 +1,6 @@
 'use client'
 import AppHeader from '@/app/workspace/_components/AppHeader';
-import AppSidebar from '@/app/workspace/_components/AppSidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
+
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -28,8 +27,7 @@ function EditCourse({ViewCourse=false}) {
 
   return (
     <div className='bg-gradient-to-r from-slate-25 to-slate-50 via-slate-100'>
-        <SidebarProvider>
-            <AppSidebar/>
+       
             <div className='w-full'>
                 <AppHeader/>
                 <div className='p-10 flex flex-col gap-4'>
@@ -37,7 +35,7 @@ function EditCourse({ViewCourse=false}) {
                     <ChapterTopicList course={course} ViewCourse = {ViewCourse}/>
                 </div>
             </div>
-        </SidebarProvider>
+     
     </div>
   )
 }

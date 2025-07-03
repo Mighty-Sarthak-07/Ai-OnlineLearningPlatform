@@ -82,7 +82,7 @@ export async function POST(req) {
     });
 
     const { has } = await auth()
-const hasPremiumAccess = has({ plan: 'standard' })
+      const hasPremiumAccess = has({ plan: 'standard' });
 
     const config = {
       responseMimeType: 'text/plain',
@@ -98,6 +98,13 @@ const hasPremiumAccess = has({ plan: 'standard' })
         ],
       },
     ];
+
+    if(!hasPremiumAccess){
+      const result = await db.select().from(coursesTable).where(eq(coursesTable.userEmail,user?.primaryEmailAddress?.emailAddress));
+      if(result?.length >= 1){
+        return NextResponse.json({ error: 'Premium access required' }, { status: 401 });
+      }
+    }
   
     const response = await ai.models.generateContent({
       model,

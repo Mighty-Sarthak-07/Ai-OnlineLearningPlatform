@@ -8,8 +8,7 @@ import EnrollCourseList from './_components/EnrollCourseList'
 
 function WorkspaceProvider({children}) {
   return (
-    <SidebarProvider>
-        <AppSidebar/>
+   
       
         <div className='w-full'> 
             <AppHeader/>
@@ -20,7 +19,7 @@ function WorkspaceProvider({children}) {
                 <CourseList/>
             </div>
         </div>
-    </SidebarProvider>
+   
   )
 }
 
