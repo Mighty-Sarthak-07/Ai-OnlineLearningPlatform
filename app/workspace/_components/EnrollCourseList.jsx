@@ -20,7 +20,7 @@ function EnrollCourseList() {
         <h1 className='text-2xl font-bold m-2 mb-4'>Continue your Learning Process   </h1>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
            {enrollCourses && enrollCourses.length > 0 ? enrollCourses.map((course,index) => (
-            <EnrollCourseCard key={index} course={course?.courses} enrollCourse={course?.enrollCourses} />
+            <EnrollCourseCard key={index} course={course?.courses} enrollCourse={course?.enrollcourses} />
            )) : (
             <p>No enrolled courses found.</p>
            )}

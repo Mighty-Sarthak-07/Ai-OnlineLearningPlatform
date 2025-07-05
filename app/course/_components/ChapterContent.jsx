@@ -40,7 +40,7 @@ function ChapterContent({ courseInfo, refreshData }) {
   };
 
   return (
-    <div className="flex flex-col w-full h-full p-7">
+    <div className="flex flex-col md:w-full w-[80%] md:h-full p-7">
       <div className="flex justify-between items-center">
         {courseContent?.[selectedChapter] ? (
           <h2 className="text-2xl font-bold">
@@ -81,8 +81,8 @@ function ChapterContent({ courseInfo, refreshData }) {
 
       <div className="space-y-4 grid grid-col-1 md:grid-cols-2 gap-5">
         {VideoData?.length > 0 ? (
-          VideoData.slice(0, 2).map((video, index) => (
-            <div key={index} className="rounded-md overflow-hidden">
+          VideoData.slice(0, 4).map((video, index) => (
+            <div key={index} className="rounded-md w-full p-2 overflow-hidden">
               <YouTube
                 videoId={video.id}
                 opts={{

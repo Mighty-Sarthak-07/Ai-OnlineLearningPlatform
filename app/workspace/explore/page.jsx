@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -8,27 +8,22 @@ import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import AppHeader from "../_components/AppHeader";
 import CourseCard from "../_components/CourseCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Explore() {
-  const [courses, setCourses] = useState([]);
-  const { user } = useUser();
+  
+  const [isLoading, setIsLoading] = useState(true);
+const [courses, setCourses] = useState([])  
+    const {user} = useUser();
+    useEffect(() => {
+       user && GetCoursesList()
+    }, [user])
 
-  useEffect(() => {
-    if (user) {
-      GetCoursesList();
-    }
-  }, [user]);
-
-  const GetCoursesList = async () => {
-    try {
-      const response = await axios.get("/api/courses?courseId=0");
-      console.log("Fetched courses:", response.data);
-      setCourses(response.data.courses || []); // ✅ Safely extract the courses array
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-      setCourses([]); // fallback if API fails
-    }
-  };
+    const GetCoursesList = async () => {
+        const response = await axios.get('/api/courses?courseId=0')
+        setCourses(response.data);
+        console.log(response.data);
+    };
 
   return (
     <div>
@@ -50,13 +45,13 @@ function Explore() {
         <h2 className="text-3xl font-bold p-3">My Courses</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {Array.isArray(courses) && courses.length > 0 ? (
-            courses.map((course, index) => (
-              <CourseCard key={index} course={course} />
-            ))
-          ) : (
-            <p className="text-gray-500 p-3">No courses found.</p>
-          )}
+          {courses.length>0 ? courses?.map((course,index) => (
+            <CourseCard key={index} course={course} />
+          )):
+          [0,1,2,3].map((item)=>(
+            <Skeleton key={item} className="w-full h-[240px]"/>
+          ))
+          }
         </div>
       </div>
     </div>

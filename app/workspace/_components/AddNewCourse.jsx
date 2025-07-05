@@ -106,7 +106,7 @@ function AddNewCourse({children}) {
         <Input type="text" placeholder="e.g. Education,Technology,etc." onChange={(e) => onHandleChange("category", e?.target.value)} />
        </div>
        <div>
-        <Button className='w-full mt-5' onClick={onGenerate} disabled={isLoading}> 
+        <Button className='w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white' onClick={onGenerate} disabled={isLoading}> 
           {isLoading ? <Loader2 className='animate-spin' /> : <Sparkle/>}
          Create Course</Button>
        </div>
