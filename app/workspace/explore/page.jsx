@@ -9,21 +9,32 @@ import { useUser } from "@clerk/nextjs";
 import AppHeader from "../_components/AppHeader";
 import CourseCard from "../_components/CourseCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "react-hot-toast";
 
 function Explore() {
   
   const [isLoading, setIsLoading] = useState(true);
-const [courses, setCourses] = useState([])  
-    const {user} = useUser();
-    useEffect(() => {
-       user && GetCoursesList()
-    }, [user])
+  const [courses, setCourses] = useState([])  
+  const {user} = useUser();
+  
+  useEffect(() => {
+    user && GetCoursesList()
+  }, [user])
 
-    const GetCoursesList = async () => {
-        const response = await axios.get('/api/courses?courseId=0')
-        setCourses(response.data);
-        console.log(response.data);
-    };
+  const GetCoursesList = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get('/api/courses?courseId=0')
+      setCourses(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+      toast.error('Failed to load courses');
+      setCourses([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -45,13 +56,17 @@ const [courses, setCourses] = useState([])
         <h2 className="text-3xl font-bold p-3">My Courses</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {courses.length>0 ? courses?.map((course,index) => (
-            <CourseCard key={index} course={course} />
-          )):
-          [0,1,2,3].map((item)=>(
-            <Skeleton key={item} className="w-full h-[240px]"/>
-          ))
-          }
+          {isLoading ? (
+            [0,1,2,3].map((item)=>(
+              <Skeleton key={item} className="w-full h-[240px]"/>
+            ))
+          ) : courses.length > 0 ? (
+            courses.map((course,index) => (
+              <CourseCard key={index} course={course} />
+            ))
+          ) : (
+            <p className="col-span-3 text-center text-gray-500 p-4">No courses found.</p>
+          )}
         </div>
       </div>
     </div>

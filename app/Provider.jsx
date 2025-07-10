@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { UserdetailsContext } from '@/context/UserdetailsContext';
 import { SelectedChapterContext } from '@/context/SelectedChapterContext';
+
 function Provider({children}){
     const {user} = useUser();
     const [userDetails, setUserDetails] = useState();
@@ -27,7 +28,7 @@ function Provider({children}){
             });
             console.log('User created:', result.data);
         } catch (error) {
-            console.error('Error creating user:', error);
+            
         }
     }
 

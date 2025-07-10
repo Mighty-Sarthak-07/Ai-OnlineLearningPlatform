@@ -40,7 +40,7 @@ function ChapterContent({ courseInfo, refreshData }) {
   };
 
   return (
-    <div className="flex flex-col md:w-full w-[80%] md:h-full p-7">
+    <div className="flex flex-col w-full md:w-[80%] md:h-full p-7">
       <div className="flex justify-between items-center">
         {courseContent?.[selectedChapter] ? (
           <h2 className="text-2xl font-bold">

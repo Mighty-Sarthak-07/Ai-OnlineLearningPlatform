@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
-import { PlayCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Skeleton } from '@/components/ui/skeleton';
+import { motion } from 'framer-motion';
+import { PlayCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -22,7 +21,12 @@ function EnrollCourseCard({ course, enrollCourse }) {
   const progress = calculateProgress();
 
   return (
-    <div className='shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] pb-3'>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+      className='shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] pb-3 bg-white flex flex-col'
+    >
       <div className='relative aspect-video'>
         <Image
           src={course.bannerImageUrl || '/online.jpg'}
@@ -53,7 +57,7 @@ function EnrollCourseCard({ course, enrollCourse }) {
           </Button>
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
