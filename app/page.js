@@ -4,10 +4,15 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import {
+  Instagram,
+  Linkedin,
+  Twitter,
+} from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen p-10 bg-gradient-to-br from-indigo-950 to-blue-800 text-white">
+    <div className="p-10 min-h-screen bg-gradient-to-br from-indigo-950 to-blue-800 text-white">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col md:flex-row items-center justify-between">
@@ -258,7 +263,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-gradient-to-r from-purple-900/80 to-blue-900/80 p-12 rounded-2xl text-center max-w-4xl mx-auto"
+          className="bg-gradient-to-r from-purple-900/80 to-blue-900/80 p-12 rounded-2xl text-center max-w-4xl mb-5 mx-auto"
         >
           <h2 className="text-3xl font-bold mb-6">Start your learning journey today</h2>
           <Link href="/workspace/billing">
@@ -266,6 +271,43 @@ export default function Home() {
               Get Started
             </Button>
           </Link>
+        </motion.div>
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-gradient-to-r from-purple-900/80 to-blue-900/80 p-12 py-20 rounded-2xl text-center max-w-7xl my-10 mx-auto"
+        >
+          <h2 className="text-3xl font-bold mb-6"> Designed by <span className="text-slate-100 text-shadow-2xl">Sarthak Kesarwani</span> </h2>
+          <div className='flex gap-5 items-center justify-center'>
+          <motion.a
+                  href="https://www.linkedin.com/in/sarthak-kesarwani-48b4702a7?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2, rotate: 5 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Linkedin className='hover:text-black'/>
+                </motion.a>
+                <motion.a
+                  href="https://twitter.com/your-twitter-handle"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2, rotate: 5 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Twitter className='hover:text-black' />
+                </motion.a>
+                <motion.a
+                  href="https://www.instagram.com/savage_sarthak_07?igsh=MTBtbWlzd2Z1emU0cg=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2, rotate: 5 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Instagram className='hover:text-black' />
+                </motion.a>
+                </div>
         </motion.div>
       </div>
     </div>
