@@ -14,6 +14,7 @@ export default function Home() {
   return (
     <div className="p-10 min-h-screen bg-gradient-to-br from-indigo-950 to-blue-800 text-white">
       {/* Hero Section */}
+      
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="md:w-1/2 mb-10 md:mb-0">
