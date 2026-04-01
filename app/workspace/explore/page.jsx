@@ -1,77 +1,166 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
-import axios from "axios";
-import { useUser } from "@clerk/nextjs";
-import AppHeader from "../_components/AppHeader";
-import CourseCard from "../_components/CourseCard";
-import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "react-hot-toast";
+import { useEffect, useState } from "react"
+import { Input } from "@/components/ui/input"
+import { Search, CompassIcon, SlidersHorizontal, X } from "lucide-react"
+import axios from "axios"
+import { useUser } from "@clerk/nextjs"
+import AppHeader from "../_components/AppHeader"
+import CourseCard from "../_components/CourseCard"
+import { toast } from "react-hot-toast"
+import { motion, AnimatePresence } from "framer-motion"
+
+const CATEGORIES = ["All", "Development", "Design", "Business", "Data Science", "Marketing"]
 
 function Explore() {
-  
-  const [isLoading, setIsLoading] = useState(true);
-  const [courses, setCourses] = useState([])  
-  const {user} = useUser();
-  
+  const [isLoading, setIsLoading] = useState(true)
+  const [courses, setCourses] = useState([])
+  const [search, setSearch] = useState("")
+  const [activeCategory, setActiveCategory] = useState("All")
+  const { user } = useUser()
+
   useEffect(() => {
     user && GetCoursesList()
   }, [user])
 
   const GetCoursesList = async () => {
     try {
-      setIsLoading(true);
+      setIsLoading(true)
       const response = await axios.get('/api/courses?courseId=0')
-      setCourses(response.data);
-      console.log(response.data);
+      setCourses(response.data)
     } catch (error) {
-      console.error('Error fetching courses:', error);
-      toast.error('Failed to load courses');
-      setCourses([]);
+      console.error('Error fetching courses:', error)
+      toast.error('Failed to load courses')
+      setCourses([])
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
+
+  const filtered = courses.filter(c => {
+    const name = c?.courseJson?.course?.name?.toLowerCase() ?? ""
+    const desc = c?.courseJson?.course?.description?.toLowerCase() ?? ""
+    return name.includes(search.toLowerCase()) || desc.includes(search.toLowerCase())
+  })
 
   return (
-    <div>
-      <AppHeader/>
-    <div className="p-4 m-7 flex flex-col">
-      <h2 className="text-4xl font-bold p-2 mb-4 text-verdana bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-        Explore More Courses
-      </h2>
+    <div className="min-h-screen bg-slate-50">
+      <AppHeader />
 
-      <div className="flex gap-4 items-center">
-        <Input placeholder="Search" />
-        <Button className="bg-gradient-to-r from-purple-500 to-indigo-500 hover:scale-[1.05] hover:shadow-lg ease-in-out duration-300 hover:text-white flex items-center gap-2 ml-4">
-          <Search className="mr-2 h-4 w-4" />
-          Search
-        </Button>
-      </div>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Page header */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600
+              flex items-center justify-center shadow-md shadow-violet-200">
+              <CompassIcon className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-slate-800">Explore Courses</h1>
+              <p className="text-sm text-slate-400">Discover and enroll in courses that match your goals</p>
+            </div>
+          </div>
+        </motion.div>
 
-      <div className="flex flex-col mt-6">
-        <h2 className="text-3xl font-bold p-3">My Courses</h2>
+        {/* Search + filter bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex flex-col sm:flex-row gap-3 mb-6"
+        >
+          <div className="relative flex-1">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search courses by name or description..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 bg-white
+                text-sm text-slate-700 placeholder:text-slate-400
+                focus:outline-none focus:ring-2 focus:ring-violet-400/30 focus:border-violet-300
+                transition-all shadow-sm"
+            />
+            {search && (
+              <button onClick={() => setSearch("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {isLoading ? (
-            [0,1,2,3].map((item)=>(
-              <Skeleton key={item} className="w-full h-[240px]"/>
-            ))
-          ) : courses.length > 0 ? (
-            courses.map((course,index) => (
-              <CourseCard key={index} course={course} />
-            ))
-          ) : (
-            <p className="col-span-3 text-center text-gray-500 p-4">No courses found.</p>
-          )}
-        </div>
+        {/* Category pills */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.15 }}
+          className="flex gap-2 flex-wrap mb-8"
+        >
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200
+                ${activeCategory === cat
+                  ? 'bg-violet-600 text-white border-violet-600 shadow-sm shadow-violet-200'
+                  : 'bg-white text-slate-500 border-slate-200 hover:border-violet-300 hover:text-violet-600'}`}
+            >
+              {cat}
+            </button>
+          ))}
+        </motion.div>
+
+        {/* Results count */}
+        {!isLoading && (
+          <p className="text-sm text-slate-400 mb-4">
+            {filtered.length} course{filtered.length !== 1 ? 's' : ''} found
+            {search && <span> for "<span className="text-slate-600 font-medium">{search}</span>"</span>}
+          </p>
+        )}
+
+        {/* Grid */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[0, 1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="rounded-2xl bg-slate-200 animate-pulse h-72" />
+            ))}
+          </div>
+        ) : filtered.length > 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          >
+            <AnimatePresence>
+              {filtered.map((course, index) => (
+                <motion.div
+                  key={course.cid ?? index}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <CourseCard course={course} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20
+            border-2 border-dashed border-slate-200 rounded-2xl">
+            <Search className="w-10 h-10 text-slate-300 mb-3" />
+            <p className="font-semibold text-slate-500">No courses found</p>
+            <p className="text-sm text-slate-400 mt-1">Try a different search term</p>
+          </div>
+        )}
       </div>
     </div>
-    </div>
-  );
+  )
 }
 
-export default Explore;
+export default Explore

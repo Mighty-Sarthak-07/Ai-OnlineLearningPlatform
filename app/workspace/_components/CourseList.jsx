@@ -1,5 +1,5 @@
 "use client"
-import { Button } from '@/components/ui/button'
+
 import { useUser } from '@clerk/nextjs'
 import axios from 'axios'
 import { motion } from 'framer-motion'
@@ -7,53 +7,109 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import AddNewCourse from './AddNewCourse'
 import CourseCard from './CourseCard'
+import { BookPlus, GraduationCap } from 'lucide-react'
 
 function CourseList() {
-    const [courses, setCourses] = useState([])  
-    const {user} = useUser();
-    useEffect(() => {
-       user && GetCoursesList()
-    }, [user])
+  const [courses, setCourses] = useState([])
+  const [loading, setLoading] = useState(true)
+  const { user } = useUser()
 
-    const GetCoursesList = async () => {
-        try {
-            const response = await axios.get('/api/courses')
-            setCourses(response.data);
-            console.log(response.data);
-        } catch (error) {
-            console.error('Error fetching courses:', error);
-        }
+  useEffect(() => {
+    user && GetCoursesList()
+  }, [user])
+
+  const GetCoursesList = async () => {
+    try {
+      setLoading(true)
+      const response = await axios.get('/api/courses')
+      setCourses(response.data)
+    } catch (error) {
+      console.error('Error fetching courses:', error)
+    } finally {
+      setLoading(false)
     }
-  
+  }
+
   return (
-    <div>
-        <h2 className='text-3xl font-bold p-3 mt-3'>My Courses</h2>
-        {courses?.length === 0 ?
+    <div className="mt-8">
+      {/* Section header */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center">
+            <GraduationCap className="w-4 h-4 text-violet-600" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-800">My Created Courses</h2>
+          {courses.length > 0 && (
+            <span className="text-xs font-semibold px-2 py-0.5 bg-violet-50 text-violet-600 border border-violet-100 rounded-full">
+              {courses.length}
+            </span>
+          )}
+        </div>
+        <AddNewCourse>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+              bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white
+              shadow-sm shadow-violet-200 hover:shadow-md transition-all"
+          >
+            <BookPlus className="w-4 h-4" />
+            New Course
+          </motion.button>
+        </AddNewCourse>
+      </div>
+
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[0, 1, 2].map(i => (
+            <div key={i} className="rounded-2xl bg-slate-100 animate-pulse h-72" />
+          ))}
+        </div>
+      ) : courses.length === 0 ? (
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className='flex flex-col gap-5 justify-center items-center h-full m-5 shadow-lg p-5 rounded-2xl bg-white'
+          className="flex flex-col items-center justify-center gap-4 py-14
+            border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/60"
         >
-            <Image src="/online.jpg" className='rounded-2xl max-w-full h-auto' alt="No courses" width={400} height={300} />
-            <h2 className='text-2xl font-bold text-center'>Look like you don't have any courses yet</h2>
-            <AddNewCourse>
-                <Button>
-                    + Create Your First Course
-                </Button>
-            </AddNewCourse>
-        </motion.div>:
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'
-        >
-            {courses?.map((course,index) => (
-              <CourseCard key={index} course={course} />
-            ))}
+          <div className="w-14 h-14 rounded-2xl bg-violet-50 border border-violet-100 flex items-center justify-center">
+            <BookPlus className="w-6 h-6 text-violet-500" />
+          </div>
+          <div className="text-center">
+            <p className="font-semibold text-slate-700">No courses yet</p>
+            <p className="text-sm text-slate-400 mt-0.5">Create your first course and start teaching!</p>
+          </div>
+          <AddNewCourse>
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold
+                bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white
+                shadow-md shadow-violet-200 hover:shadow-lg transition-all"
+            >
+              <BookPlus className="w-4 h-4" />
+              Create First Course
+            </motion.button>
+          </AddNewCourse>
         </motion.div>
-    }
+      ) : (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+        >
+          {courses.map((course, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.06 }}
+            >
+              <CourseCard course={course} />
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
     </div>
   )
 }

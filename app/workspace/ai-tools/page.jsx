@@ -1,420 +1,303 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { motion } from "framer-motion";
-import { Bot, Send, Sparkles, User } from "lucide-react";
+  Bot, Send, User, Sparkles, BookOpen, TrendingUp,
+  Code2, BrainCircuit, Lightbulb, ChevronRight, Loader2, RotateCcw,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
+import AppHeader from "../_components/AppHeader";
+
+const SUGGESTED = [
+  { icon: BookOpen,     text: "Best courses to learn React in 2024?" },
+  { icon: TrendingUp,   text: "Suggest a learning path for data science" },
+  { icon: Code2,        text: "How can I improve my coding skills?" },
+  { icon: BrainCircuit, text: "Resources for machine learning beginners?" },
+  { icon: Lightbulb,    text: "What are the latest web dev trends?" },
+];
+
+function formatAIResponse(content) {
+  if (!content) return null;
+  return content.split('\n\n').map((para, i) => {
+    if (para.trim().startsWith('•') || para.trim().startsWith('-')) {
+      return (
+        <ul key={i} className="list-disc list-inside space-y-1 ml-1 mb-2">
+          {para.split('\n').map((item, j) => (
+            <li key={j} className="text-sm">{item.replace(/^[•\-]\s*/, '')}</li>
+          ))}
+        </ul>
+      );
+    }
+    if (/^\d+\./.test(para.trim())) {
+      return (
+        <ol key={i} className="list-decimal list-inside space-y-1 ml-1 mb-2">
+          {para.split('\n').map((item, j) => (
+            <li key={j} className="text-sm">{item.replace(/^\d+\.\s*/, '')}</li>
+          ))}
+        </ol>
+      );
+    }
+    if (para.trim().startsWith('**') || para.trim().startsWith('#')) {
+      return <h3 key={i} className="font-bold text-sm mb-1 mt-2">{para.replace(/^[*#]+\s*/, '')}</h3>;
+    }
+    return <p key={i} className="text-sm mb-2 leading-relaxed">{para}</p>;
+  });
+}
 
 export default function AIToolsPage() {
   const [messages, setMessages] = useState([
     {
-      id: 1,
-      role: "assistant",
-      content: "Hello! I'm your AI learning assistant. I can help you with course-related questions, tech recommendations, and educational guidance. What would you like to know?",
-      timestamp: new Date()
+      id: 1, role: "assistant",
+      content: "Hello! I'm your AI learning assistant 🤖 I can help with course recommendations, tech guidance, learning paths and study tips. What would you like to explore?",
+      timestamp: new Date(),
     }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
-  const [showSuggested, setShowSuggested] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (!input.trim()) return;
-
-    const userMessage = {
-      id: Date.now(),
-      role: "user",
-      content: input,
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
+  const sendMessage = async (text) => {
+    const msg = text ?? input;
+    if (!msg.trim() || isLoading) return;
+    const userMsg = { id: Date.now(), role: "user", content: msg, timestamp: new Date() };
+    setMessages(prev => [...prev, userMsg]);
     setInput("");
     setIsLoading(true);
-
     try {
-      const response = await fetch("/api/ai-chat", {
+      const res = await fetch("/api/ai-chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: input,
-          history: messages.slice(-10) // Send last 10 messages for context
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg, history: messages.slice(-10) }),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to get response");
-      }
-
-      const data = await response.json();
-      
-      const assistantMessage = {
-        id: Date.now() + 1,
-        role: "assistant",
-        content: data.response,
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Failed to get AI response. Please try again.");
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setMessages(prev => [...prev, { id: Date.now() + 1, role: "assistant", content: data.response, timestamp: new Date() }]);
+    } catch {
+      toast.error("Failed to get a response. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
+  const handleKey = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   };
 
-  const suggestedQuestions = [
-    "What are the best courses for learning React?",
-    "Can you recommend resources for machine learning?",
-    "How can I improve my coding skills?",
-    "What's the latest in web development trends?",
-    "Suggest a learning path for data science"
-  ];
-
-  // Function to format AI responses with better formatting
-  const formatAIResponse = (content) => {
-    if (!content) return content;
-    
-    // Split content into paragraphs
-    const paragraphs = content.split('\n\n');
-    
-    return paragraphs.map((paragraph, index) => {
-      // Check if it's a list item
-      if (paragraph.trim().startsWith('•') || paragraph.trim().startsWith('-')) {
-        return (
-          <div key={index} className="mb-2">
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              {paragraph.split('\n').map((item, itemIndex) => (
-                <li key={itemIndex} className="text-sm">
-                  {item.replace(/^[•-]\s*/, '')}
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
-      }
-      
-      // Check if it's a numbered list
-      if (/^\d+\./.test(paragraph.trim())) {
-        return (
-          <div key={index} className="mb-2">
-            <ol className="list-decimal list-inside space-y-1 ml-2">
-              {paragraph.split('\n').map((item, itemIndex) => (
-                <li key={itemIndex} className="text-sm">
-                  {item.replace(/^\d+\.\s*/, '')}
-                </li>
-              ))}
-            </ol>
-          </div>
-        );
-      }
-      
-      // Check if it's a heading (starts with ** or #)
-      if (paragraph.trim().startsWith('**') || paragraph.trim().startsWith('#')) {
-        return (
-          <h3 key={index} className="font-semibold text-base mb-2 mt-3 first:mt-0">
-            {paragraph.replace(/^[*#]+\s*/, '')}
-          </h3>
-        );
-      }
-      
-      // Regular paragraph
-      return (
-        <p key={index} className="mb-2 leading-relaxed">
-          {paragraph}
-        </p>
-      );
-    });
-  };
-
-  // Framer Motion blob animation variants
-  const blobVariants = {
-    animate1: {
-      x: [0, 40, -30, 0],
-      y: [0, -30, 20, 0],
-      scale: [1, 1.1, 0.95, 1],
-      transition: { duration: 18, repeat: Infinity, ease: "easeInOut" }
-    },
-    animate2: {
-      x: [0, -30, 20, -10, 0],
-      y: [0, 40, -20, 10, 0],
-      scale: [1, 1.05, 0.97, 1.08, 1],
-      transition: { duration: 22, repeat: Infinity, ease: "easeInOut" }
-    },
-    animate3: {
-      x: [0, -20, 30, 0],
-      y: [0, 30, -10, 0],
-      scale: [1, 1.07, 0.93, 1],
-      transition: { duration: 20, repeat: Infinity, ease: "easeInOut" }
-    }
+  const clearChat = () => {
+    setMessages([{
+      id: 1, role: "assistant",
+      content: "Chat cleared! What would you like to explore?",
+      timestamp: new Date(),
+    }]);
   };
 
   return (
-    <div className="relative container mx-auto p-2 sm:p-6 max-w-6xl min-h-screen overflow-hidden">
-      {/* Animated background blobs with Framer Motion */}
-      <div aria-hidden="true">
+    <div className="min-h-screen bg-slate-50">
+      <AppHeader />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-6 h-[calc(100vh-64px)]">
+
+        {/* Page header */}
         <motion.div
-          className="pointer-events-none select-none absolute -top-32 -left-32 w-96 h-96 bg-gradient-to-tr from-blue-400 via-purple-400 to-pink-400 opacity-30 rounded-full blur-3xl z-0"
-          variants={blobVariants}
-          animate="animate1"
-        />
-        <motion.div
-          className="pointer-events-none select-none absolute top-1/2 right-0 w-80 h-80 bg-gradient-to-br from-purple-300 via-blue-300 to-green-300 opacity-20 rounded-full blur-2xl z-0"
-          variants={blobVariants}
-          animate="animate2"
-        />
-        <motion.div
-          className="pointer-events-none select-none absolute bottom-0 left-1/2 w-72 h-72 bg-gradient-to-tl from-pink-300 via-purple-200 to-blue-200 opacity-20 rounded-full blur-2xl z-0"
-          variants={blobVariants}
-          animate="animate3"
-        />
-      </div>
-      {/* Main content (z-10) */}
-      <motion.div
-        className="relative z-10"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-      >
-        {/* Header restored above the tab buttons */}
-        <div className="mb-4 sm:mb-8">
-          <div className="flex items-center gap-2 sm:gap-3 mb-4">
-            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between flex-shrink-0"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600
+              flex items-center justify-center shadow-md shadow-violet-200">
+              <BrainCircuit className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold">AI Learning Assistant</h1>
-              <p className="text-sm sm:text-base text-muted-foreground">
-                Get personalized help with courses, tech recommendations, and educational guidance
-              </p>
+              <h1 className="text-xl font-bold text-slate-800">AI Learning Assistant</h1>
+              <p className="text-xs text-slate-400">Personalized guidance powered by AI</p>
             </div>
           </div>
-        </div>
-        {/* Top Buttons for Popups */}
-        <div className="flex flex-wrap gap-3 mb-6 justify-center sm:justify-start">
-          <Dialog open={showSuggested} onOpenChange={setShowSuggested}>
-            <DialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="font-medium px-4 py-2 text-sm"
-                onClick={() => setShowSuggested(true)}
-              >
-                Suggested Questions
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md w-full">
-              <DialogHeader>
-                <DialogTitle>Suggested Questions</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-2 mt-2">
-                {suggestedQuestions.map((question, index) => (
-                  <Button
-                    key={index}
-                    variant="ghost"
-                    className="w-full justify-start text-left h-auto p-2 text-sm"
-                    onClick={() => {
-                      setInput(question);
-                      setShowSuggested(false);
-                    }}
-                    disabled={isLoading}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={clearChat}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium
+              bg-white border border-slate-200 text-slate-500 hover:text-slate-700
+              hover:border-slate-300 transition-all shadow-sm"
+          >
+            <RotateCcw className="w-3.5 h-3.5" /> Clear chat
+          </motion.button>
+        </motion.div>
+
+        {/* Main grid */}
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-4 min-h-0">
+
+          {/* Chat panel */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="lg:col-span-3 flex flex-col bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+          >
+            {/* Chat header */}
+            <div className="flex items-center gap-2 px-5 py-3.5 border-b border-slate-100 flex-shrink-0">
+              <div className="w-7 h-7 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center">
+                <Bot className="w-4 h-4 text-violet-600" />
+              </div>
+              <span className="text-sm font-semibold text-slate-700">AI Chat</span>
+              <span className="ml-auto flex items-center gap-1.5 text-xs text-emerald-600">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                Online
+              </span>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4 scrollbar-thin-light">
+              <AnimatePresence initial={false}>
+                {messages.map(msg => (
+                  <motion.div
+                    key={msg.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
-                    <span className="line-clamp-2">{question}</span>
-                  </Button>
+                    {msg.role === "assistant" && (
+                      <div className="w-8 h-8 rounded-xl bg-violet-50 border border-violet-100
+                        flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Bot className="w-4 h-4 text-violet-600" />
+                      </div>
+                    )}
+                    <div className={`max-w-[78%] rounded-2xl px-4 py-3 shadow-sm
+                      ${msg.role === "user"
+                        ? "bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white rounded-tr-sm"
+                        : "bg-slate-50 border border-slate-200 text-slate-700 rounded-tl-sm"}`}
+                    >
+                      {msg.role === "assistant"
+                        ? <div className="prose-sm">{formatAIResponse(msg.content)}</div>
+                        : <p className="text-sm">{msg.content}</p>
+                      }
+                      <p className={`text-[10px] mt-1.5 ${msg.role === "user" ? "text-white/60 text-right" : "text-slate-400"}`}>
+                        {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                    {msg.role === "user" && (
+                      <div className="w-8 h-8 rounded-xl bg-violet-600
+                        flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <User className="w-4 h-4 text-white" />
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              {isLoading && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex gap-3"
+                >
+                  <div className="w-8 h-8 rounded-xl bg-violet-50 border border-violet-100
+                    flex items-center justify-center flex-shrink-0">
+                    <Bot className="w-4 h-4 text-violet-600" />
+                  </div>
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl rounded-tl-sm px-4 py-3">
+                    <div className="flex items-center gap-1.5">
+                      {[0, 0.15, 0.3].map((delay, i) => (
+                        <motion.span
+                          key={i}
+                          className="w-2 h-2 rounded-full bg-violet-400"
+                          animate={{ y: [0, -5, 0] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input bar */}
+            <div className="px-4 py-3 border-t border-slate-100 flex-shrink-0">
+              <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5
+                focus-within:border-violet-300 focus-within:ring-2 focus-within:ring-violet-400/20 transition-all">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={handleKey}
+                  placeholder="Ask about courses, tech, or learning paths..."
+                  className="flex-1 bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
+                  disabled={isLoading}
+                  autoFocus
+                />
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => sendMessage()}
+                  disabled={isLoading || !input.trim()}
+                  className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white
+                    flex items-center justify-center flex-shrink-0
+                    disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
+                >
+                  {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Suggestions panel */}
+          <motion.div
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col gap-3"
+          >
+            {/* Quick prompts */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Sparkles className="w-4 h-4 text-violet-500" />
+                <span className="text-sm font-semibold text-slate-700">Quick Prompts</span>
+              </div>
+              <div className="space-y-2">
+                {SUGGESTED.map(({ icon: Icon, text }, i) => (
+                  <motion.button
+                    key={i}
+                    whileHover={{ x: 2 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => sendMessage(text)}
+                    disabled={isLoading}
+                    className="w-full flex items-start gap-2.5 px-3 py-2.5 rounded-xl text-left
+                      bg-slate-50 border border-slate-200 hover:border-violet-200 hover:bg-violet-50
+                      transition-all duration-200 group disabled:opacity-50"
+                  >
+                    <Icon className="w-3.5 h-3.5 text-slate-400 group-hover:text-violet-500 flex-shrink-0 mt-0.5 transition-colors" />
+                    <span className="text-xs text-slate-600 group-hover:text-slate-800 leading-snug line-clamp-2">
+                      {text}
+                    </span>
+                    <ChevronRight className="w-3 h-3 text-slate-300 group-hover:text-violet-400 flex-shrink-0 mt-0.5 ml-auto transition-colors" />
+                  </motion.button>
                 ))}
               </div>
-            </DialogContent>
-          </Dialog>
-          <Dialog open={showHelp} onOpenChange={setShowHelp}>
-            <DialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="font-medium px-4 py-2 text-sm"
-                onClick={() => setShowHelp(true)}
-              >
-                What I Can Help With
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md w-full">
-              <DialogHeader>
-                <DialogTitle>What I Can Help With</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-3 text-sm mt-2">
-                <div className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Course recommendations and reviews</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Technology trends and updates</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Learning path suggestions</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Study tips and techniques</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Career guidance in tech</span>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+            </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
-          {/* Chat Interface */}
-          <div className="lg:col-span-3 flex flex-col h-[70vh] sm:h-[600px] min-h-[400px]">
-            <Card className="flex flex-col flex-1 min-h-0 h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bot className="h-5 w-5" />
-                  AI Chat Assistant
-                </CardTitle>
-                <CardDescription>
-                  Ask me anything about courses, technology, or education
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col min-h-0">
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto space-y-4 mb-4 px-2 custom-scrollbar min-h-0" style={{scrollbarWidth: 'thin'}}>
-                  {messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex gap-2 sm:gap-3 ${
-                        message.role === "user" ? "justify-end" : "justify-start"
-                      }`}
-                    >
-                      <div
-                        className={`flex gap-2 sm:gap-3 max-w-[90%] sm:max-w-[80%] ${
-                          message.role === "user" ? "flex-row-reverse" : "flex-row"
-                        }`}
-                      >
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                            message.role === "user"
-                              ? "bg-blue-500 text-white"
-                              : "bg-gray-100 text-gray-600"
-                          }`}
-                        >
-                          {message.role === "user" ? (
-                            <User className="h-4 w-4" />
-                          ) : (
-                            <Bot className="h-4 w-4" />
-                          )}
-                        </div>
-                        <div
-                          className={`rounded-xl p-3 sm:p-4 shadow-sm ${
-                            message.role === "user"
-                              ? "bg-blue-500 text-white"
-                              : "bg-white text-gray-900 border border-gray-200"
-                          }`}
-                          style={{wordBreak: 'break-word'}}
-                        >
-                          <div className="text-sm whitespace-pre-wrap leading-relaxed">
-                            {message.role === "assistant" ? (
-                              <div className="prose prose-sm max-w-none">
-                                {formatAIResponse(message.content)}
-                              </div>
-                            ) : (
-                              message.content
-                            )}
-                          </div>
-                          <p className="text-xs opacity-60 mt-1 text-right">
-                            {message.timestamp.toLocaleTimeString()}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  {isLoading && (
-                    <div className="flex gap-2 sm:gap-3 justify-start">
-                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-                        <Bot className="h-4 w-4 text-gray-600" />
-                      </div>
-                      <div className="bg-gray-100 rounded-xl p-3 sm:p-4">
-                        <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  <div ref={messagesEndRef} />
-                </div>
+            {/* Capabilities */}
+            <div className="bg-gradient-to-br from-violet-50 to-fuchsia-50 rounded-2xl border border-violet-100 p-4">
+              <p className="text-xs font-semibold text-violet-700 mb-3 uppercase tracking-wider">I can help with</p>
+              <ul className="space-y-2">
+                {["Course recommendations", "Learning path planning", "Tech trend insights", "Study tips & techniques", "Career guidance"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-2 text-xs text-violet-700">
+                    <span className="w-1.5 h-1.5 rounded-full bg-violet-400 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
 
-                {/* Input */}
-                <div className="flex gap-2 p-2 border-t bg-white sticky bottom-0 z-10">
-                  <Input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Ask me about courses, tech, or education..."
-                    className="flex-1 text-sm sm:text-base"
-                    disabled={isLoading}
-                    autoFocus
-                  />
-                  <Button
-                    onClick={handleSendMessage}
-                    disabled={isLoading || !input.trim()}
-                    className="px-3 sm:px-4"
-                    size="sm"
-                  >
-                    <Send className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-          {/* Sidebar removed: no more suggested/help cards */}
         </div>
-      </motion.div>
-      <style jsx global>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #e5e7eb;
-          border-radius: 6px;
-        }
-        .custom-scrollbar {
-          scrollbar-width: thin;
-          scrollbar-color: #e5e7eb #fff;
-        }
-      `}</style>
+      </div>
     </div>
   );
-} 
+}
