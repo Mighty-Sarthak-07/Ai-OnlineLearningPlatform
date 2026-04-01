@@ -5,6 +5,9 @@ export const usersTable = pgTable("users", {
   name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
   subscriptionid: varchar(),
+  // Streak tracking: persisted in DB, updated on each chapter completion
+  streakDays: integer("streak_days").default(0).notNull(),
+  lastActiveDate: varchar("last_active_date", { length: 10 }).default(''), // stored as 'YYYY-MM-DD'
 });
 
 export const coursesTable = pgTable("courses", {
