@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { UserdetailsContext } from '@/context/UserDetailsContext';
 import { SelectedChapterContext } from '@/context/SelectedChapterContext';
+import { NotificationProvider } from '@/context/NotificationContext';
+import NotifyBridge from '@/app/workspace/_components/NotifyBridge';
 
 function Provider({children}){
     const {user} = useUser();
@@ -35,9 +37,12 @@ function Provider({children}){
     return (
         <UserdetailsContext.Provider value={{userDetails, setUserDetails}}>
             <SelectedChapterContext.Provider value={{selectedChapter, setSelectedChapter}}>
-            <div>
-                {children}
-            </div>
+                <NotificationProvider>
+                    <NotifyBridge />
+                    <div>
+                        {children}
+                    </div>
+                </NotificationProvider>
             </SelectedChapterContext.Provider>
         </UserdetailsContext.Provider>
     )

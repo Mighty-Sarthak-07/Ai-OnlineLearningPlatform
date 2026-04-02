@@ -4,7 +4,6 @@ import { currentUser } from "@clerk/nextjs/server";
 import { and, desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-// ── Streak helpers ────────────────────────────────────────────────────────────
 function todayUTC() {
   return new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
 }
@@ -34,7 +33,6 @@ function computeStreak(currentStreak, lastActiveDate) {
   }
 }
 
-// ── POST: enroll in a course ──────────────────────────────────────────────────
 export async function POST(req) {
   try {
     const { cid } = await req.json();
@@ -61,14 +59,14 @@ export async function POST(req) {
         { status: 200 }
       );
     } else {
-      return NextResponse.json({ message: "Course already enrolled" }, { status: 400 });
+      // Return 200 instead of 400 to prevent red console errors, but flag it as already enrolled
+      return NextResponse.json({ message: "Course already enrolled", alreadyEnrolled: true }, { status: 200 });
     }
   } catch (error) {
     return NextResponse.json({ message: "Server Error" }, { status: 500 });
   }
 }
 
-// ── GET: fetch enrolled courses ───────────────────────────────────────────────
 export async function GET(req) {
   try {
     const user = await currentUser();
@@ -102,7 +100,6 @@ export async function GET(req) {
   }
 }
 
-// ── PUT: mark chapter completed + update real streak ─────────────────────────
 export async function PUT(req) {
   try {
     const { completedChapter, courseId } = await req.json();

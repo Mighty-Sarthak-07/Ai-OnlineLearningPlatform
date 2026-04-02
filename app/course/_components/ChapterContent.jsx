@@ -6,8 +6,8 @@ import { CheckCircle2, PlayCircle, BookOpen, Loader2, Sparkles } from 'lucide-re
 import YouTube from 'react-youtube';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
-import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { notify } from '@/lib/notify';
 
 function ChapterContent({ courseInfo, refreshData }) {
   const { courseId } = useParams();
@@ -22,25 +22,49 @@ function ChapterContent({ courseInfo, refreshData }) {
 
   let completedChapter = enrollCourse?.completedChapters ?? [];
   const isCompleted = completedChapter.includes(selectedChapter);
+  const totalChapters = courseContent?.length ?? 0;
+  const XP_PER_CHAPTER = 100;
 
   const markCompleted = async () => {
     if (isCompleted || isMarking) return;
     setIsMarking(true);
     try {
       if (!completedChapter.includes(selectedChapter)) {
-        completedChapter.push(selectedChapter);
+        const newCompleted = [...completedChapter, selectedChapter];
+
         await axios.put('/api/enroll-course', {
           courseId: courseId,
-          completedChapter: completedChapter,
+          completedChapter: newCompleted,
         });
+
         await refreshData();
-        toast.success('Chapter marked as completed! 🎉');
+
+        const isCourseDone = newCompleted.length >= totalChapters && totalChapters > 0;
+
+        if (isCourseDone) {
+          // 🏆 Course complete — big celebration notification
+          const totalXP = totalChapters * XP_PER_CHAPTER;
+          notify.courseComplete(
+            course?.courseJson?.course?.name ?? 'the course',
+            totalXP
+          );
+        } else {
+          // ✅ Chapter done notification with XP
+          notify.chapterDone(chapterName, selectedChapter + 1, XP_PER_CHAPTER);
+        }
+
+        // 🔥 Streak notification (always — the PUT updated DB)
+        // Small delay so it staggers nicely after the chapter/course toast
+        setTimeout(() => {
+          notify.streak(newCompleted.length); // proxy: each completed chapter = 1 active day
+        }, 800);
+
       } else {
-        toast.info('Chapter already completed');
+        notify.error('Chapter already completed');
       }
     } catch (error) {
       console.error('Error marking chapter as completed:', error);
-      toast.error('Failed to mark chapter as completed');
+      notify.error('Failed to mark chapter as completed. Please try again.');
     } finally {
       setIsMarking(false);
     }

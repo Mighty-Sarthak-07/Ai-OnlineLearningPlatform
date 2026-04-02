@@ -41,7 +41,6 @@ export default function PageLoadingProvider({ children }) {
 
   return (
     <>
-      {/* ── Branded loading overlay ── */}
       <AnimatePresence>
         {loading && (
           <motion.div
@@ -98,7 +97,6 @@ export default function PageLoadingProvider({ children }) {
         )}
       </AnimatePresence>
 
-      {/* ── Page content (always rendered, loader sits above) ── */}
       <motion.div
         key={pathname}
         initial={{ opacity: 0, y: 8 }}

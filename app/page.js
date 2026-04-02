@@ -8,309 +8,332 @@ import {
   Instagram,
   Linkedin,
   Twitter,
+  Bot,
+  TrendingUp,
+  LayoutTemplate,
+  Headset,
+  Database,
+  Code2,
+  BrainCircuit,
+  Briefcase,
+  ArrowRight,
+  Sparkles,
+  GraduationCap
 } from "lucide-react";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
 
 export default function Home() {
   return (
-    <div className="p-10 min-h-screen bg-gradient-to-br from-indigo-950 to-blue-800 text-white">
-      {/* Hero Section */}
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-violet-200 selection:text-violet-900">
       
-      <div className="container mx-auto px-4 py-16">
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          <div className="md:w-1/2 mb-10 md:mb-0">
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-5xl md:text-6xl font-bold mb-4"
-            >
-              Learn Smarter,<br />
-              Not Harder with AI
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl mb-8"
-            >
-              Your personalized learning journey<br />
-              begins here
-            </motion.p>
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4"
-            >
-              <Link href="/workspace">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 rounded-md text-lg">
-                  Get Started
-                </Button>
-              </Link>
-              <Link href="/workspace/explore">
-                <Button variant="outline" className="border-white text-black hover:bg-white/10 px-8 py-6 rounded-md text-lg">
-                  Explore Courses
-                </Button>
-              </Link>
-            </motion.div>
-          </div>
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="md:w-1/2 relative"
-          >
-            <Image 
-              src="/online.jpg" 
-              alt="AI Learning Platform" 
-              width={700} 
-              height={500} 
-              className="rounded-lg shadow-2xl"
-            />
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-gradient-to-br from-purple-900 to-purple-800 p-8 rounded-xl shadow-lg"
-          >
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-purple-700 rounded-full flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.5 2.25m0 0v5.714a2.25 2.25 0 01-1.5 2.25m0 0a24.301 24.301 0 01-4.5 0m0 0v-5.714a2.25 2.25 0 001.5-2.25m0 0V3.104m0 0a24.301 24.301 0 00-4.5 0" />
-                </svg>
-              </div>
+      {/* ── Navbar ── */}
+      <motion.header 
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="fixed top-0 inset-x-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/50"
+      >
+        <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600
+              flex items-center justify-center shadow-lg shadow-violet-200
+              group-hover:shadow-violet-300 transition-all duration-300 group-hover:scale-105">
+              <GraduationCap className="w-5 h-5 text-white" />
             </div>
-            <h3 className="text-xl font-bold text-center mb-2">AI Tutor</h3>
-            <p className="text-center text-sm text-gray-300">Personalized assistance with a robot tutor</p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-gradient-to-br from-blue-900 to-blue-800 p-8 rounded-xl shadow-lg"
-          >
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-blue-700 rounded-full flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-                </svg>
-              </div>
-            </div>
-            <h3 className="text-xl font-bold text-center mb-2">Progress Tracking</h3>
-            <p className="text-center text-sm text-gray-300">Track progress of your learning journey</p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-gradient-to-br from-blue-800 to-blue-700 p-8 rounded-xl shadow-lg"
-          >
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <h3 className="text-xl font-bold text-center mb-2">Interactive Courses</h3>
-            <p className="text-center text-sm text-gray-300">Learn effectively with interactive content</p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-gradient-to-br from-blue-700 to-blue-600 p-8 rounded-xl shadow-lg"
-          >
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <h3 className="text-xl font-bold text-center mb-2">24/7 Support</h3>
-            <p className="text-center text-sm text-gray-300">Experience finest support anytime</p>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Testimonial Section */}
-      <div className="container mx-auto px-4 py-16">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-blue-900/30 p-8 rounded-xl backdrop-blur-sm max-w-3xl mx-auto"
-        >
-          <div className="flex items-center mb-6">
-            <div className="w-16 h-16 bg-blue-700 rounded-full mr-4 overflow-hidden">
-              <Image 
-                src="/logo.jpg" 
-                alt="User" 
-                width={64} 
-                height={64} 
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <p className="text-xl italic">"This AI platform has transformed the way I learn. The personalized support is incredible!"</p>
-              <div className="flex mt-4">
-                {[1, 2, 3, 4, 5].map((_, index) => (
-                  <div key={index} className="w-2 h-2 bg-blue-500 rounded-full mx-1"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Categories Section */}
-         <div className="container mx-auto px-4 py-16">
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-3xl font-bold text-center mb-12"
-        >
-          Browse by Category
-        </motion.h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className="bg-purple-900/50 hover:bg-purple-800/60 transition-all duration-300 p-6 rounded-xl text-center cursor-pointer"
-          >
-            <div className="flex justify-center mb-4">
-              <Image 
-                src="/exploratory-analysis.png" 
-                alt="Data Science" 
-                width={60} 
-                height={60} 
-                className="object-contain"
-              />
-            </div>
-            <h3 className="text-xl font-bold mb-2">Data Science</h3>
-          </motion.div>
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-            className="bg-blue-900/50 hover:bg-blue-800/60 transition-all duration-300 p-6 rounded-xl text-center cursor-pointer"
-          >
-            <div className="flex justify-center mb-4">
-              <Image 
-                src="/programming.png" 
-                alt="Programming" 
-                width={60} 
-                height={60} 
-                className="object-contain"
-              />
-            </div>
-            <h3 className="text-xl font-bold mb-2">Programming</h3>
-          </motion.div>
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: 0.3 }}
-            className="bg-indigo-900/50 hover:bg-indigo-800/60 transition-all duration-300 p-6 rounded-xl text-center cursor-pointer"
-          >
-            <div className="flex justify-center mb-4">
-              <Image 
-                src="/ai.png" 
-                alt="AI & Machine Learning" 
-                width={60} 
-                height={60} 
-                className="object-contain"
-              />
-            </div>
-            <h3 className="text-xl font-bold mb-2">AI & Machine Learning</h3>
-          </motion.div>
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: 0.4 }}
-            className="bg-blue-800/50 hover:bg-blue-700/60 transition-all duration-300 p-6 rounded-xl text-center cursor-pointer"
-          >
-            <div className="flex justify-center mb-4">
-              <Image 
-                src="/business-report.png" 
-                alt="Business" 
-                width={60} 
-                height={60} 
-                className="object-contain"
-              />
-            </div>
-            <h3 className="text-xl font-bold mb-2">Business</h3>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="container mx-auto px-4 py-16">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-gradient-to-r from-purple-900/80 to-blue-900/80 p-12 rounded-2xl text-center max-w-4xl mb-5 mx-auto"
-        >
-          <h2 className="text-3xl font-bold mb-6">Start your learning journey today</h2>
-          <Link href="/workspace/billing">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 rounded-md text-lg">
-              Get Started
-            </Button>
+            <span className="font-bold text-slate-800 text-xl tracking-tight hidden sm:block">
+              Skill<span className="text-violet-600">World</span>
+            </span>
           </Link>
-        </motion.div>
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-gradient-to-r from-purple-900/80 to-blue-900/80 p-12 py-20 rounded-2xl text-center max-w-7xl my-10 mx-auto"
-        >
-          <h2 className="text-3xl font-bold mb-6"> Designed by <span className="text-slate-100 text-shadow-2xl">Sarthak Kesarwani</span> </h2>
-          <div className='flex gap-5 items-center justify-center'>
-          <motion.a
-                  href="https://www.linkedin.com/in/sarthak-kesarwani-48b4702a7?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.2, rotate: 5 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Linkedin className='hover:text-black'/>
-                </motion.a>
-                <motion.a
-                  href="https://twitter.com/your-twitter-handle"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.2, rotate: 5 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Twitter className='hover:text-black' />
-                </motion.a>
-                <motion.a
-                  href="https://www.instagram.com/savage_sarthak_07?igsh=MTBtbWlzd2Z1emU0cg=="
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.2, rotate: 5 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Instagram className='hover:text-black' />
-                </motion.a>
+
+          <div className="flex items-center gap-4">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="text-sm font-semibold text-slate-600 hover:text-violet-600 transition-colors px-2">
+                  Log in
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button className="text-sm font-semibold bg-slate-900 text-white px-5 py-2.5 rounded-full hover:bg-violet-600 hover:shadow-md hover:shadow-violet-200 transition-all duration-300">
+                  Sign up free
+                </button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <Link href="/workspace">
+                <button className="text-sm font-semibold text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 px-5 py-2.5 rounded-full transition-all duration-300 flex items-center gap-2">
+                  Go to Dashboard <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
+              <div className="pl-2 border-l border-slate-200">
+                <UserButton afterSignOutUrl="/" appearance={{ elements: { avatarBox: "w-9 h-9" } }} />
+              </div>
+            </SignedIn>
+          </div>
+        </div>
+      </motion.header>
+
+      {/* ── Hero Section ── */}
+      <div className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        {/* Background Decorative Blobs */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] opacity-30 pointer-events-none">
+          <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-violet-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob" />
+          <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-fuchsia-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000" />
+          <div className="absolute -bottom-8 left-1/3 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            
+            {/* Left Content */}
+            <div className="flex-1 text-center lg:text-left">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-50 border border-violet-100 text-violet-600 text-sm font-semibold mb-6">
+                  <Sparkles className="w-4 h-4" /> Next-Gen AI Learning
+                </span>
+                <h1 className="text-5xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] mb-6">
+                  Learn Smarter,<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600">
+                    Not Harder.
+                  </span>
+                </h1>
+                <p className="text-lg lg:text-xl text-slate-500 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                  Your personalized, AI-driven learning journey begins here. Master new skills in half the time with our intelligent curriculum generator.
+                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                  <Link href="/workspace">
+                    <button className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-900 text-white font-semibold flex items-center justify-center gap-2 hover:bg-violet-600 hover:shadow-xl hover:shadow-violet-200 transition-all duration-300 hover:-translate-y-1">
+                      Start Learning Free <ArrowRight className="w-5 h-5" />
+                    </button>
+                  </Link>
+                  <Link href="/workspace/explore">
+                    <button className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white text-slate-700 font-semibold border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-300">
+                      Explore Courses
+                    </button>
+                  </Link>
                 </div>
-        </motion.div>
+              </motion.div>
+            </div>
+
+            {/* Right Image */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, rotate: -2 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 0.7, delay: 0.2, type: 'spring' }}
+              className="flex-1 relative w-full max-w-lg lg:max-w-none"
+            >
+              <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-violet-900/10 border my-4 border-slate-200/50 bg-white">
+                <Image 
+                  src="/online.jpg" 
+                  alt="AI Learning Platform Dashboard" 
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+              
+              {/* Floating widget */}
+              <motion.div 
+                animate={{ y: [-10, 10, -10] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 flex items-center gap-4"
+              >
+                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-emerald-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-800">Skill Level</p>
+                  <p className="text-xs text-emerald-600 font-semibold">+40% this week</p>
+                </div>
+              </motion.div>
+            </motion.div>
+
+          </div>
+        </div>
       </div>
+
+      {/* ── Features Bento Grid ── */}
+      <div className="py-24 bg-white relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Why choose SkillWorld?</h2>
+            <p className="text-slate-500 text-lg">We combine powerful AI with beautifully structured curriculum to give you the ultimate learning experience.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: Bot, title: "AI Tutor", desc: "Instant, personalized assistance whenever you're stuck.", color: "violet" },
+              { icon: TrendingUp, title: "Progress Tracking", desc: "Watch your skills grow with real-time analytics.", color: "emerald" },
+              { icon: LayoutTemplate, title: "Interactive Courses", desc: "Learn by doing, not just watching.", color: "fuchsia" },
+              { icon: Headset, title: "24/7 Support", desc: "Our community and AI are always here to help.", color: "amber" }
+            ].map((feature, i) => {
+              const colors = {
+                violet:  { bg: 'bg-violet-50',  text: 'text-violet-600',  border: 'hover:border-violet-200' },
+                emerald: { bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'hover:border-emerald-200' },
+                fuchsia: { bg: 'bg-fuchsia-50', text: 'text-fuchsia-600', border: 'hover:border-fuchsia-200' },
+                amber:   { bg: 'bg-amber-50',   text: 'text-amber-600',   border: 'hover:border-amber-200' },
+              }[feature.color];
+
+              return (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className={`bg-slate-50 p-8 rounded-3xl border border-slate-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${colors.border}`}
+                >
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${colors.bg}`}>
+                    <feature.icon className={`w-7 h-7 ${colors.text}`} />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">{feature.title}</h3>
+                  <p className="text-slate-500 leading-relaxed">{feature.desc}</p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Categories ── */}
+      <div className="py-24 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Browse by Category</h2>
+              <p className="text-slate-500 text-lg">Find the perfect course to advance your career.</p>
+            </div>
+            <Link href="/workspace/explore" className="hidden sm:inline-flex items-center gap-2 text-violet-600 font-semibold hover:text-violet-700 transition-colors">
+              View all <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: Database, title: "Data Science", count: "120+ courses" },
+              { icon: Code2, title: "Programming", count: "340+ courses" },
+              { icon: BrainCircuit, title: "AI & Machine Learning", count: "85+ courses" },
+              { icon: Briefcase, title: "Business Strategy", count: "210+ courses" }
+            ].map((cat, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className="group bg-white p-6 rounded-3xl border border-slate-200 hover:border-violet-300 hover:shadow-lg hover:shadow-violet-100 cursor-pointer transition-all duration-300"
+              >
+                <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-violet-600 transition-colors duration-300">
+                  <cat.icon className="w-6 h-6 text-slate-600 group-hover:text-white transition-colors duration-300" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">{cat.title}</h3>
+                <p className="text-sm text-slate-500">{cat.count}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Testimonial ── */}
+      <div className="py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="bg-gradient-to-br from-violet-50 to-fuchsia-50 p-10 md:p-14 rounded-[40px] border border-violet-100 relative"
+          >
+            <div className="absolute top-10 right-10 text-violet-200">
+              <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" /></svg>
+            </div>
+            
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10">
+              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-xl flex-shrink-0">
+                <Image 
+                  src="/logo.jpg" 
+                  alt="User" 
+                  width={96} 
+                  height={96} 
+                  className="object-cover"
+                />
+              </div>
+              <div className="text-center md:text-left">
+                <div className="flex justify-center md:justify-start gap-1 mb-4">
+                  {[1, 2, 3, 4, 5].map((_, index) => (
+                    <Sparkles key={index} className="w-5 h-5 text-amber-400 fill-amber-400" />
+                  ))}
+                </div>
+                <p className="text-xl md:text-2xl font-medium text-slate-800 leading-relaxed mb-6">
+                  "This AI platform has completely transformed the way I learn. The personalized curriculum adapts directly to my pace, cutting my learning time in half!"
+                </p>
+                <div>
+                  <p className="font-bold text-slate-900">Sarah Jenkins</p>
+                  <p className="text-sm text-violet-600 font-medium">Software Engineer • 30+ Courses Completed</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ── Footer CTA & Footer ── */}
+      <footer className="bg-slate-900 text-slate-300 pt-24 pb-12 rounded-t-[3rem] mt-12 relative overflow-hidden">
+        {/* Glow effect */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-600/30 blur-[120px] rounded-full pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center max-w-2xl mx-auto mb-24"
+          >
+            <h2 className="text-4xl font-bold text-white mb-6">Ready to superpower your skills?</h2>
+            <p className="text-slate-400 text-lg mb-10">Join thousands of learners building their future today. It's completely free to get started.</p>
+            <Link href="/workspace">
+              <button className="bg-white text-slate-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-violet-400 hover:text-white transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-violet-500/25">
+                Join SkillWorld Now
+              </button>
+            </Link>
+          </motion.div>
+
+          <div className="border-t border-slate-800 pt-12 mt-12 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center">
+                <GraduationCap className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-bold text-white text-xl tracking-tight">
+                Skill<span className="text-violet-400">World</span>
+              </span>
+            </div>
+
+            <p className="text-sm text-slate-500">
+              Designed by <span className="font-semibold text-slate-300">Sarthak Kesarwani</span> &copy; 2026
+            </p>
+
+            <div className="flex items-center gap-4">
+              {[
+                { icon: Linkedin, href: "https://www.linkedin.com/in/sarthak-kesarwani-48b4702a7?" },
+                { icon: Twitter, href: "https://twitter.com" },
+                { icon: Instagram, href: "https://www.instagram.com/savage_sarthak_07" }
+              ].map((social, i) => (
+                <a 
+                  key={i}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer" 
+                  className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-violet-600 hover:text-white transition-all duration-300"
+                >
+                  <social.icon className="w-4 h-4" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

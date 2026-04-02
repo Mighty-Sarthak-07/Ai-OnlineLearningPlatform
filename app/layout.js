@@ -29,7 +29,17 @@ export default function RootLayout({ children }) {
         <Provider>
         {children}
         </Provider>
-        <Toaster />
+        <Toaster
+          position="bottom-right"
+          expand={false}
+          visibleToasts={4}
+          toastOptions={{
+            unstyled: false,
+            classNames: {
+              toast: 'shadow-lg rounded-2xl border border-slate-200 bg-white',
+            },
+          }}
+        />
       </body>
     </html>
     </ClerkProvider>

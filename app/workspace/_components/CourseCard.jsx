@@ -5,7 +5,8 @@ import { Book, LoaderCircle, PlayCircle, Settings, TrendingUp, Users } from 'luc
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { notify } from '@/lib/notify';
 import axios from 'axios';
 
 const levelColor = {
@@ -20,14 +21,24 @@ function CourseCard({ course }) {
   const lc = levelColor[level] ?? levelColor.beginner;
   const [loading, setLoading] = useState(false);
 
+  const router = useRouter();
+
   const handleEnroll = async () => {
     try {
       setLoading(true);
-      const result = await axios.post('/api/enroll-course', { cid: course?.cid });
-      toast.success('Course enrolled successfully 🎉');
+      const res = await axios.post('/api/enroll-course', { cid: course?.cid });
+      
+      if (res.data?.alreadyEnrolled) {
+        notify.chapterDone(courseJson?.name ?? 'this course', 'You were already enrolled!', 0); 
+        // Showing a success/neutral style isn't bad! Let's just use normal notify for "already enrolled" 
+        // to not sound like an error
+      } else {
+        notify.enroll(courseJson?.name ?? 'this course');
+      }
+      
+      router.push(`/course/${course?.cid}`);
     } catch (error) {
-      if (error.response?.status === 400) toast.warning('Already enrolled in this course');
-      else toast.error('Something went wrong. Try again.');
+      notify.error('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }

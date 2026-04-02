@@ -44,7 +44,6 @@ function AppSidebar() {
     >
       <Sidebar className="border-r border-slate-100">
 
-        {/* ── Header ── */}
         <SidebarHeader className="px-4 pt-5 pb-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
             <div className="relative flex-shrink-0">
@@ -70,7 +69,6 @@ function AppSidebar() {
 
         <SidebarContent className="px-3 pt-4">
 
-          {/* ── Create Course CTA ── */}
           <SidebarGroup className="mb-2 px-0">
             <AddNewCourse>
               <motion.button
@@ -88,12 +86,10 @@ function AppSidebar() {
             </AddNewCourse>
           </SidebarGroup>
 
-          {/* ── Divider label ── */}
           <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest px-2 mb-2">
             Navigation
           </p>
 
-          {/* ── Nav items ── */}
           <SidebarGroup className="px-0">
             <SidebarGroupContent>
               <SidebarMenu className="space-y-0.5">
@@ -142,7 +138,6 @@ function AppSidebar() {
           </SidebarGroup>
         </SidebarContent>
 
-        {/* ── Footer ── */}
         <SidebarFooter className="px-4 py-4 border-t border-slate-100">
           <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-violet-50 to-fuchsia-50 border border-violet-100">
             <div className="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">

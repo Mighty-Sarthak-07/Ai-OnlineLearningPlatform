@@ -13,29 +13,24 @@ export async function GET() {
 
     const email = user.primaryEmailAddress?.emailAddress;
 
-    // 1. Enrolled courses joined with course data
     const enrolled = await db
       .select()
       .from(enrollCoursesTable)
       .innerJoin(coursesTable, eq(coursesTable.cid, enrollCoursesTable.cid))
       .where(eq(enrollCoursesTable.userEmail, email));
 
-    // 2. Courses created by this user
     const created = await db
       .select()
       .from(coursesTable)
       .where(eq(coursesTable.userEmail, email));
 
-    // 3. Read persisted streak from users table
     const [dbUser] = await db
       .select()
       .from(usersTable)
       .where(eq(usersTable.email, email));
 
-    // ── Compute stats ──────────────────────────────────────────────────────
     const enrolledCount = enrolled.length;
 
-    // Completed = courses where all chapters are marked done
     const completedCount = enrolled.filter((row) => {
       const done = row.enrollcourses?.completedChapters ?? [];
       const chapters = row.courses?.courseJson?.course?.chapters ?? [];
