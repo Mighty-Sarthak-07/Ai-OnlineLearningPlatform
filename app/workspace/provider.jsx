@@ -6,7 +6,7 @@ import EnrollCourseList from './_components/EnrollCourseList'
 
 function WorkspaceProvider({ children }) {
   return (
-    <div className="w-full min-h-screen bg-slate-50">
+    <div className="w-full min-h-screen bg-transparent">
       <AppHeader />
       <div className="max-w-7xl mx-auto px-6 py-8">
         {children}

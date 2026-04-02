@@ -50,7 +50,7 @@ export default function PageLoadingProvider({ children }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
             className="fixed inset-0 z-[9999] flex flex-col items-center justify-center
-              bg-white/95 backdrop-blur-sm"
+              bg-white/95 dark:bg-slate-950/95 backdrop-blur-sm"
           >
             {/* Animated ring */}
             <div className="relative mb-5">
@@ -58,7 +58,7 @@ export default function PageLoadingProvider({ children }) {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                className="w-16 h-16 rounded-full border-4 border-violet-100 border-t-violet-600"
+                className="w-16 h-16 rounded-full border-4 border-violet-100 dark:border-violet-900/50 border-t-violet-600 dark:border-t-violet-500"
               />
               {/* Icon in center */}
               <div className="absolute inset-0 flex items-center justify-center">
@@ -80,8 +80,8 @@ export default function PageLoadingProvider({ children }) {
               transition={{ delay: 0.1 }}
               className="text-center"
             >
-              <p className="text-sm font-semibold text-slate-600">Loading</p>
-              <p className="text-lg font-bold text-slate-800 mt-0.5">
+              <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">Loading</p>
+              <p className="text-lg font-bold text-slate-800 dark:text-slate-200 mt-0.5">
                 {pageLabel}
               </p>
             </motion.div>

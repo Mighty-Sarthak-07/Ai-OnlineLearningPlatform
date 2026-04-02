@@ -97,7 +97,7 @@ export default function AIToolsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-transparent">
       <AppHeader />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-6 h-[calc(100vh-64px)]">
@@ -114,8 +114,8 @@ export default function AIToolsPage() {
               <BrainCircuit className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-800">AI Learning Assistant</h1>
-              <p className="text-xs text-slate-400">Personalized guidance powered by AI</p>
+              <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">AI Learning Assistant</h1>
+              <p className="text-xs text-slate-400 dark:text-slate-500">Personalized guidance powered by AI</p>
             </div>
           </div>
           <motion.button
@@ -123,8 +123,8 @@ export default function AIToolsPage() {
             whileTap={{ scale: 0.95 }}
             onClick={clearChat}
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium
-              bg-white border border-slate-200 text-slate-500 hover:text-slate-700
-              hover:border-slate-300 transition-all shadow-sm"
+              bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200
+              hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-sm dark:shadow-none"
           >
             <RotateCcw className="w-3.5 h-3.5" /> Clear chat
           </motion.button>
@@ -138,14 +138,14 @@ export default function AIToolsPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="lg:col-span-3 flex flex-col bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+            className="lg:col-span-3 flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none overflow-hidden"
           >
             {/* Chat header */}
-            <div className="flex items-center gap-2 px-5 py-3.5 border-b border-slate-100 flex-shrink-0">
-              <div className="w-7 h-7 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center">
-                <Bot className="w-4 h-4 text-violet-600" />
+            <div className="flex items-center gap-2 px-5 py-3.5 border-b border-slate-100 dark:border-slate-800/50 flex-shrink-0">
+              <div className="w-7 h-7 rounded-lg bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20 flex items-center justify-center">
+                <Bot className="w-4 h-4 text-violet-600 dark:text-violet-400" />
               </div>
-              <span className="text-sm font-semibold text-slate-700">AI Chat</span>
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">AI Chat</span>
               <span className="ml-auto flex items-center gap-1.5 text-xs text-emerald-600">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 Online
@@ -163,21 +163,21 @@ export default function AIToolsPage() {
                     className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     {msg.role === "assistant" && (
-                      <div className="w-8 h-8 rounded-xl bg-violet-50 border border-violet-100
+                      <div className="w-8 h-8 rounded-xl bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20
                         flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Bot className="w-4 h-4 text-violet-600" />
+                        <Bot className="w-4 h-4 text-violet-600 dark:text-violet-400" />
                       </div>
                     )}
-                    <div className={`max-w-[78%] rounded-2xl px-4 py-3 shadow-sm
+                    <div className={`max-w-[78%] rounded-2xl px-4 py-3 shadow-sm dark:shadow-none
                       ${msg.role === "user"
                         ? "bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white rounded-tr-sm"
-                        : "bg-slate-50 border border-slate-200 text-slate-700 rounded-tl-sm"}`}
+                        : "bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 text-slate-700 dark:text-slate-300 rounded-tl-sm"}`}
                     >
                       {msg.role === "assistant"
-                        ? <div className="prose-sm">{formatAIResponse(msg.content)}</div>
+                        ? <div className="prose-sm dark:prose-invert">{formatAIResponse(msg.content)}</div>
                         : <p className="text-sm">{msg.content}</p>
                       }
-                      <p className={`text-[10px] mt-1.5 ${msg.role === "user" ? "text-white/60 text-right" : "text-slate-400"}`}>
+                      <p className={`text-[10px] mt-1.5 ${msg.role === "user" ? "text-white/60 dark:text-white/70 text-right" : "text-slate-400 dark:text-slate-500"}`}>
                         {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
@@ -197,12 +197,12 @@ export default function AIToolsPage() {
                   animate={{ opacity: 1 }}
                   className="flex gap-3"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-violet-50 border border-violet-100
+                  <div className="w-8 h-8 rounded-xl bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20
                     flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-violet-600" />
+                    <Bot className="w-4 h-4 text-violet-600 dark:text-violet-400" />
                   </div>
-                  <div className="bg-slate-50 border border-slate-200 rounded-2xl rounded-tl-sm px-4 py-3">
-                    <div className="flex items-center gap-1.5">
+                    <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl rounded-tl-sm px-4 py-3">
+                      <div className="flex items-center gap-1.5">
                       {[0, 0.15, 0.3].map((delay, i) => (
                         <motion.span
                           key={i}
@@ -219,16 +219,16 @@ export default function AIToolsPage() {
             </div>
 
             {/* Input bar */}
-            <div className="px-4 py-3 border-t border-slate-100 flex-shrink-0">
-              <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5
-                focus-within:border-violet-300 focus-within:ring-2 focus-within:ring-violet-400/20 transition-all">
+            <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-800 flex-shrink-0">
+              <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5
+                focus-within:border-violet-300 dark:focus-within:border-violet-500/50 focus-within:ring-2 focus-within:ring-violet-400/20 dark:focus-within:ring-violet-500/20 transition-all">
                 <input
                   type="text"
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={handleKey}
                   placeholder="Ask about courses, tech, or learning paths..."
-                  className="flex-1 bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
+                  className="flex-1 bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none"
                   disabled={isLoading}
                   autoFocus
                 />
@@ -255,10 +255,10 @@ export default function AIToolsPage() {
             className="flex flex-col gap-3"
           >
             {/* Quick prompts */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none p-4">
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-4 h-4 text-violet-500" />
-                <span className="text-sm font-semibold text-slate-700">Quick Prompts</span>
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Quick Prompts</span>
               </div>
               <div className="space-y-2">
                 {SUGGESTED.map(({ icon: Icon, text }, i) => (
@@ -269,25 +269,25 @@ export default function AIToolsPage() {
                     onClick={() => sendMessage(text)}
                     disabled={isLoading}
                     className="w-full flex items-start gap-2.5 px-3 py-2.5 rounded-xl text-left
-                      bg-slate-50 border border-slate-200 hover:border-violet-200 hover:bg-violet-50
+                      bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:border-violet-200 dark:hover:border-violet-500/30 hover:bg-violet-50 dark:hover:bg-violet-500/5
                       transition-all duration-200 group disabled:opacity-50"
                   >
                     <Icon className="w-3.5 h-3.5 text-slate-400 group-hover:text-violet-500 flex-shrink-0 mt-0.5 transition-colors" />
-                    <span className="text-xs text-slate-600 group-hover:text-slate-800 leading-snug line-clamp-2">
+                    <span className="text-xs text-slate-600 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 leading-snug line-clamp-2">
                       {text}
                     </span>
-                    <ChevronRight className="w-3 h-3 text-slate-300 group-hover:text-violet-400 flex-shrink-0 mt-0.5 ml-auto transition-colors" />
+                    <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 group-hover:text-violet-400 flex-shrink-0 mt-0.5 ml-auto transition-colors" />
                   </motion.button>
                 ))}
               </div>
             </div>
 
             {/* Capabilities */}
-            <div className="bg-gradient-to-br from-violet-50 to-fuchsia-50 rounded-2xl border border-violet-100 p-4">
-              <p className="text-xs font-semibold text-violet-700 mb-3 uppercase tracking-wider">I can help with</p>
+            <div className="bg-gradient-to-br from-violet-50 dark:from-violet-900/10 to-fuchsia-50 dark:to-fuchsia-900/10 rounded-2xl border border-violet-100 dark:border-violet-500/20 p-4">
+              <p className="text-xs font-semibold text-violet-700 dark:text-violet-400 mb-3 uppercase tracking-wider">I can help with</p>
               <ul className="space-y-2">
                 {["Course recommendations", "Learning path planning", "Tech trend insights", "Study tips & techniques", "Career guidance"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-2 text-xs text-violet-700">
+                  <li key={i} className="flex items-center gap-2 text-xs text-violet-700 dark:text-violet-300">
                     <span className="w-1.5 h-1.5 rounded-full bg-violet-400 flex-shrink-0" />
                     {item}
                   </li>

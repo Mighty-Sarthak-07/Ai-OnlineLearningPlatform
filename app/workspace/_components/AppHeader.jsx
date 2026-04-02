@@ -7,6 +7,7 @@ import { GraduationCap, Bell, Search, X, CheckCheck, Trash2 } from 'lucide-react
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { useNotifications } from '@/context/NotificationContext';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const colorMap = {
   violet:  { bg: 'bg-violet-50',  border: 'border-violet-100',  dot: 'bg-violet-500' },
@@ -53,26 +54,26 @@ function AppHeader({ hideSidebar = false }) {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/90 backdrop-blur-md shadow-sm"
+      className="sticky top-0 z-40 w-full border-b border-slate-100 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md shadow-sm"
     >
       <div className="flex items-center justify-between px-4 h-16 gap-4">
 
         {/* Left: trigger + brand */}
         <div className="flex items-center gap-3">
           {!hideSidebar && (
-            <div className="hover:bg-slate-100 rounded-lg transition-colors">
-              <SidebarTrigger className="text-slate-500 hover:text-slate-800" />
+            <div className="hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+              <SidebarTrigger className="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200" />
             </div>
           )}
           {hideSidebar && (
             <Link href="/workspace" className="flex items-center gap-2.5 group">
               <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600
-                flex items-center justify-center shadow-md shadow-violet-200
+                flex items-center justify-center shadow-md shadow-violet-200 dark:shadow-none
                 group-hover:shadow-violet-300 transition-shadow duration-200">
                 <GraduationCap className="w-4 h-4 text-white" />
               </div>
-              <span className="font-bold text-slate-800 text-[17px] tracking-tight hidden sm:block">
-                Skill<span className="text-violet-600">World</span>
+              <span className="font-bold text-slate-800 dark:text-slate-200 text-[17px] tracking-tight hidden sm:block">
+                Skill<span className="text-violet-600 dark:text-violet-400">World</span>
               </span>
             </Link>
           )}
@@ -86,18 +87,22 @@ function AppHeader({ hideSidebar = false }) {
               <input
                 type="text"
                 placeholder="Search chapters..."
-                className="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-slate-200
-                  bg-slate-50 text-slate-700 placeholder:text-slate-400
-                  focus:outline-none focus:ring-2 focus:ring-violet-400/40 focus:border-violet-300
+                className="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-800
+                  bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 placeholder:text-slate-400
+                  focus:outline-none focus:ring-2 focus:ring-violet-400/40 focus:border-violet-300 dark:focus:ring-violet-500/40 dark:focus:border-violet-500
                   transition-all duration-200"
               />
             </div>
           </div>
         )}
 
-        {/* Right: bell + avatar */}
+        {/* Right: theme toggle + bell + avatar */}
         <div className="flex items-center gap-2" ref={panelRef}>
 
+          {/* ── Theme Toggle ── */}
+          <ThemeToggle />
+
+          {/* ── Bell button ── */}
           <div className="relative">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -105,8 +110,8 @@ function AppHeader({ hideSidebar = false }) {
               onClick={togglePanel}
               className={`relative w-9 h-9 rounded-xl flex items-center justify-center border transition-all duration-200
                 ${panelOpen
-                  ? 'bg-violet-50 border-violet-200 text-violet-600'
-                  : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-violet-50 hover:border-violet-200 hover:text-violet-600'}`}
+                  ? 'bg-violet-50 dark:bg-violet-500/10 border-violet-200 dark:border-violet-500/30 text-violet-600 dark:text-violet-400'
+                  : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-violet-50 dark:hover:bg-violet-500/10 hover:border-violet-200 dark:hover:border-violet-500/30 hover:text-violet-600 dark:hover:text-violet-400'}`}
             >
               <Bell className="w-4 h-4" />
               {/* Unread badge */}
@@ -136,17 +141,17 @@ function AppHeader({ hideSidebar = false }) {
                   exit={{ opacity: 0, y: 8, scale: 0.96 }}
                   transition={{ duration: 0.18, ease: 'easeOut' }}
                   className="absolute right-0 top-12 w-80 sm:w-96
-                    bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/60
+                    bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/60 dark:shadow-none
                     z-50 overflow-hidden"
                 >
                   {/* Panel header */}
-                  <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-2">
-                      <Bell className="w-4 h-4 text-violet-600" />
-                      <span className="font-bold text-slate-800 text-sm">Notifications</span>
+                      <Bell className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                      <span className="font-bold text-slate-800 dark:text-slate-200 text-sm">Notifications</span>
                       {notifications.length > 0 && (
                         <span className="text-[11px] font-semibold px-1.5 py-0.5
-                          bg-violet-50 text-violet-600 border border-violet-100 rounded-full">
+                          bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-100 dark:border-violet-500/20 rounded-full">
                           {notifications.length}
                         </span>
                       )}
@@ -183,7 +188,7 @@ function AppHeader({ hideSidebar = false }) {
                   </div>
 
                   {/* Notification list */}
-                  <div className="max-h-[380px] overflow-y-auto divide-y divide-slate-50">
+                  <div className="max-h-[380px] overflow-y-auto divide-y divide-slate-50 dark:divide-slate-800/50">
                     <AnimatePresence initial={false}>
                       {notifications.length === 0 ? (
                         <motion.div
@@ -191,11 +196,11 @@ function AppHeader({ hideSidebar = false }) {
                           animate={{ opacity: 1 }}
                           className="flex flex-col items-center justify-center py-12 gap-3"
                         >
-                          <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center">
-                            <Bell className="w-5 h-5 text-slate-300" />
+                          <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                            <Bell className="w-5 h-5 text-slate-300 dark:text-slate-500" />
                           </div>
-                          <p className="text-sm font-medium text-slate-400">No notifications yet</p>
-                          <p className="text-xs text-slate-300">Complete chapters to earn XP!</p>
+                          <p className="text-sm font-medium text-slate-400 dark:text-slate-500">No notifications yet</p>
+                          <p className="text-xs text-slate-300 dark:text-slate-600">Complete chapters to earn XP!</p>
                         </motion.div>
                       ) : (
                         notifications.map((n) => {
@@ -210,17 +215,17 @@ function AppHeader({ hideSidebar = false }) {
                               transition={{ duration: 0.2 }}
                               onClick={() => markRead(n.id)}
                               className={`flex items-start gap-3 px-4 py-3.5 cursor-pointer
-                                transition-colors duration-150 hover:bg-slate-50
-                                ${!n.read ? 'bg-violet-50/40' : ''}`}
+                                transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/50
+                                ${!n.read ? 'bg-violet-50/40 dark:bg-violet-500/5' : ''}`}
                             >
                               {/* Emoji */}
                               <span className="text-xl flex-shrink-0 mt-0.5">{n.emoji}</span>
 
                               {/* Content */}
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-slate-800 leading-tight">{n.title}</p>
-                                <p className="text-xs text-slate-500 mt-0.5 leading-snug line-clamp-2">{n.message}</p>
-                                <p className="text-[10px] text-slate-300 mt-1">{timeAgo(n.createdAt)}</p>
+                                <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 leading-tight">{n.title}</p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-snug line-clamp-2">{n.message}</p>
+                                <p className="text-[10px] text-slate-300 dark:text-slate-500 mt-1">{timeAgo(n.createdAt)}</p>
                               </div>
 
                               {/* Unread indicator */}
@@ -236,8 +241,8 @@ function AppHeader({ hideSidebar = false }) {
 
                   {/* Panel footer */}
                   {notifications.length > 0 && (
-                    <div className="px-4 py-2.5 border-t border-slate-100 bg-slate-50/60">
-                      <p className="text-[11px] text-slate-400 text-center">
+                    <div className="px-4 py-2.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60">
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center">
                         {unreadCount === 0 ? 'All caught up! ✨' : `${unreadCount} unread notification${unreadCount > 1 ? 's' : ''}`}
                       </p>
                     </div>

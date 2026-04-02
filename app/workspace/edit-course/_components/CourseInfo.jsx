@@ -45,7 +45,7 @@ function CourseInfo({course,ViewCourse}) {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className='sm:flex gap-8 justify-between shadow-2xl p-8 bg-gradient-to-br from-white via-purple-50 to-blue-50 rounded-2xl items-center'
+        className='sm:flex gap-8 justify-between shadow-2xl p-8 bg-gradient-to-br from-white via-purple-50 to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 rounded-2xl items-center border border-transparent dark:border-slate-800'
       >
         <motion.div
           initial={{ opacity: 0, x: -40 }}
@@ -53,27 +53,27 @@ function CourseInfo({course,ViewCourse}) {
           transition={{ duration: 0.7, delay: 0.2 }}
           className='flex flex-col gap-6 flex-2'
         >
-          <h2 className='text-3xl font-extrabold text-purple-900'>{courseLayout?.name}</h2>
-          <p className='text-lg text-gray-700'>{courseLayout?.description}</p>
+          <h2 className='text-3xl font-extrabold text-purple-900 dark:text-purple-300'>{courseLayout?.name}</h2>
+          <p className='text-lg text-gray-700 dark:text-gray-300'>{courseLayout?.description}</p>
           <div className='gap-4 grid grid-cols-1 md:grid-cols-3'>
-            <div className='flex items-center gap-6 p-4 rounded-2xl mt-2 bg-purple-100 shadow-md hover:scale-[1.03] transition-transform'>
-              <Clock className='w-10 h-10 text-purple-500'/>
+            <div className='flex items-center gap-6 p-4 rounded-2xl mt-2 bg-purple-100 dark:bg-purple-500/10 shadow-md dark:shadow-none hover:scale-[1.03] transition-transform border border-transparent dark:border-purple-500/20'>
+              <Clock className='w-10 h-10 text-purple-500 dark:text-purple-400'/>
               <section>
-                <h1 className="font-bold">Course Duration</h1>
+                <h1 className="font-bold dark:text-slate-200">Course Duration</h1>
                 <h2>4 hours</h2>
               </section>
             </div>
-            <div className='flex items-center gap-6 p-4 rounded-2xl mt-2 bg-blue-100 shadow-md hover:scale-[1.03] transition-transform'>
-              <BookOpen className='w-10 h-10 text-blue-500'/>
+            <div className='flex items-center gap-6 p-4 rounded-2xl mt-2 bg-blue-100 dark:bg-blue-500/10 shadow-md dark:shadow-none hover:scale-[1.03] transition-transform border border-transparent dark:border-blue-500/20'>
+              <BookOpen className='w-10 h-10 text-blue-500 dark:text-blue-400'/>
               <section>
-                <h1 className="font-bold">Chapters</h1>
+                <h1 className="font-bold dark:text-slate-200">Chapters</h1>
                 <h2>{courseLayout?.chapters?.length}</h2>
               </section>
             </div>
-            <div className='flex items-center gap-6 p-4 rounded-2xl mt-2 bg-red-100 shadow-md hover:scale-[1.03] transition-transform'>
-              <TrendingUp className='w-10 h-10 text-red-500'/>
+            <div className='flex items-center gap-6 p-4 rounded-2xl mt-2 bg-red-100 dark:bg-red-500/10 shadow-md dark:shadow-none hover:scale-[1.03] transition-transform border border-transparent dark:border-red-500/20'>
+              <TrendingUp className='w-10 h-10 text-red-500 dark:text-red-400'/>
               <section>
-                <h1 className="font-bold">Difficulty Level</h1>
+                <h1 className="font-bold dark:text-slate-200">Difficulty Level</h1>
                 <h2>{courseLayout?.level}</h2>
               </section>
             </div>
@@ -101,7 +101,7 @@ function CourseInfo({course,ViewCourse}) {
               alt="banner image"
               width={600}
               height={400}
-              className='pt-3 rounded-2xl shadow-xl w-[400px] h-[240px] object-cover border-4 border-white'
+              className='pt-3 rounded-2xl shadow-xl w-[400px] h-[240px] object-cover border-4 border-white dark:border-slate-800'
             />
           ) : null}
         </motion.div>

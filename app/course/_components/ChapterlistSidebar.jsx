@@ -19,30 +19,30 @@ function ChapterlistSidebar({ courseInfo }) {
     : 0;
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-white overflow-hidden">
+    <div className="flex flex-col h-full bg-white dark:bg-slate-900 overflow-hidden">
 
       {/* ── Course Header ── */}
-      <div className="px-5 pt-5 pb-4 border-b border-slate-100 bg-gradient-to-br from-white to-violet-50/40">
+      <div className="px-5 pt-5 pb-4 border-b border-slate-100 dark:border-slate-800/50 bg-gradient-to-br from-white dark:from-slate-900 to-violet-50/40 dark:to-violet-900/10">
         {/* Badge */}
-        <div className="inline-flex items-center gap-1.5 bg-violet-50 border border-violet-100 rounded-full px-3 py-1 mb-3">
-          <GraduationCap className="w-3.5 h-3.5 text-violet-600" />
-          <span className="text-[11px] font-semibold text-violet-600 uppercase tracking-wider">
+        <div className="inline-flex items-center gap-1.5 bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20 rounded-full px-3 py-1 mb-3">
+          <GraduationCap className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
+          <span className="text-[11px] font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider">
             Course Content
           </span>
         </div>
 
         {/* Title */}
-        <h2 className="text-[15px] font-bold text-slate-800 leading-snug line-clamp-2 mb-4">
+        <h2 className="text-[15px] font-bold text-slate-800 dark:text-slate-200 leading-snug line-clamp-2 mb-4">
           {course?.courseTitle ?? 'Course Chapters'}
         </h2>
 
         {/* Progress */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <span className="text-xs text-slate-400 font-medium">Progress</span>
-            <span className="text-xs font-bold text-violet-600">{progress}%</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">Progress</span>
+            <span className="text-xs font-bold text-violet-600 dark:text-violet-400">{progress}%</span>
           </div>
-          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+          <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500"
               initial={{ width: 0 }}
@@ -51,11 +51,11 @@ function ChapterlistSidebar({ courseInfo }) {
             />
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[11px] text-slate-400">
+            <span className="text-[11px] text-slate-400 dark:text-slate-500">
               {completedChapter.length} / {courseContent.length} chapters
             </span>
             {progress === 100 && (
-              <span className="text-[11px] text-amber-500 font-semibold flex items-center gap-1">
+              <span className="text-[11px] text-amber-500 dark:text-amber-400 font-semibold flex items-center gap-1">
                 <Trophy className="w-3 h-3" /> Completed!
               </span>
             )}
@@ -89,19 +89,19 @@ function ChapterlistSidebar({ courseInfo }) {
                       no-underline hover:no-underline w-full
                       transition-all duration-200 cursor-pointer
                       ${isSelected
-                        ? 'bg-violet-50 border border-violet-200 shadow-sm'
-                        : 'hover:bg-slate-50 border border-transparent hover:border-slate-200'}
+                        ? 'bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20 shadow-sm dark:shadow-none'
+                        : 'hover:bg-slate-50 dark:hover:bg-slate-800/50 border border-transparent hover:border-slate-200 dark:hover:border-slate-800'}
                     `}
                   >
                     {/* Index / Check badge */}
                     <div className={`
                       flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold
-                      transition-all duration-200 shadow-sm
+                      transition-all duration-200 shadow-sm dark:shadow-none
                       ${isCompleted
-                        ? 'bg-emerald-500 text-white shadow-emerald-200'
+                        ? 'bg-emerald-500 dark:bg-emerald-500/20 text-white dark:text-emerald-400 shadow-emerald-200'
                         : isSelected
-                          ? 'bg-violet-600 text-white shadow-violet-200'
-                          : 'bg-slate-100 text-slate-500 border border-slate-200'}
+                          ? 'bg-violet-600 dark:bg-violet-500/20 text-white dark:text-violet-400 shadow-violet-200'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700'}
                     `}>
                       {isCompleted
                         ? <CheckCircle2 className="w-4 h-4" />
@@ -110,30 +110,30 @@ function ChapterlistSidebar({ courseInfo }) {
                     </div>
 
                     <span className={`flex-1 text-sm font-semibold leading-tight line-clamp-2
-                      ${isSelected ? 'text-violet-700' : isCompleted ? 'text-slate-500' : 'text-slate-700'}`}>
+                      ${isSelected ? 'text-violet-700 dark:text-violet-300' : isCompleted ? 'text-slate-500 dark:text-slate-400' : 'text-slate-700 dark:text-slate-300'}`}>
                       {chapter?.courseData?.chapterName}
                     </span>
 
                     {isCompleted && (
-                      <span className="text-[10px] px-2 py-0.5 bg-emerald-50 text-emerald-600
-                        rounded-full border border-emerald-200 flex-shrink-0 font-semibold">
+                      <span className="text-[10px] px-2 py-0.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400
+                        rounded-full border border-emerald-200 dark:border-emerald-500/20 flex-shrink-0 font-semibold">
                         ✓ Done
                       </span>
                     )}
                   </AccordionTrigger>
 
                   <AccordionContent className="pt-1 pb-0">
-                    <div className="ml-4 pl-3 border-l-2 border-slate-100 space-y-0.5 py-1">
+                    <div className="ml-4 pl-3 border-l-2 border-slate-100 dark:border-slate-800 space-y-0.5 py-1">
                       {topics.map((topic, topicIndex) => (
                         <motion.div
                           key={topicIndex}
                           initial={{ opacity: 0, x: -6 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: topicIndex * 0.04 }}
-                          className="flex items-start gap-2 py-1.5 px-2 rounded-lg hover:bg-violet-50/60 transition-colors group/topic"
+                          className="flex items-start gap-2 py-1.5 px-2 rounded-lg hover:bg-violet-50/60 dark:hover:bg-violet-500/10 transition-colors group/topic"
                         >
-                          <BookOpen className="w-3 h-3 text-slate-300 group-hover/topic:text-violet-400 flex-shrink-0 mt-0.5 transition-colors" />
-                          <span className="text-[11px] text-slate-400 group-hover/topic:text-slate-600 leading-tight transition-colors">
+                          <BookOpen className="w-3 h-3 text-slate-300 dark:text-slate-600 group-hover/topic:text-violet-400 dark:group-hover/topic:text-violet-400 flex-shrink-0 mt-0.5 transition-colors" />
+                          <span className="text-[11px] text-slate-400 dark:text-slate-500 group-hover/topic:text-slate-600 dark:group-hover/topic:text-slate-300 leading-tight transition-colors">
                             {topic?.topic}
                           </span>
                         </motion.div>
@@ -146,11 +146,11 @@ function ChapterlistSidebar({ courseInfo }) {
           </Accordion>
         ) : (
           <div className="flex flex-col items-center justify-center h-40 text-center">
-            <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mb-3">
-              <Lock className="w-5 h-5 text-slate-300" />
+            <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+              <Lock className="w-5 h-5 text-slate-300 dark:text-slate-600" />
             </div>
-            <p className="text-sm font-medium text-slate-400">No chapters yet</p>
-            <p className="text-xs text-slate-300 mt-0.5">Check back soon!</p>
+            <p className="text-sm font-medium text-slate-400 dark:text-slate-500">No chapters yet</p>
+            <p className="text-xs text-slate-300 dark:text-slate-600 mt-0.5">Check back soon!</p>
           </div>
         )}
       </div>
@@ -186,24 +186,24 @@ function ChapterlistSidebar({ courseInfo }) {
               onClick={() => setIsDrawerOpen(false)}
             />
             <motion.div
-              className="absolute left-0 top-0 h-full w-[85%] max-w-sm bg-white shadow-2xl z-10 flex flex-col"
+              className="absolute left-0 top-0 h-full w-[85%] max-w-sm bg-white dark:bg-slate-900 shadow-2xl z-10 flex flex-col"
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', stiffness: 320, damping: 32 }}
             >
               {/* Drawer header bar */}
-              <div className="flex items-center justify-between px-4 py-3.5 border-b border-slate-100 bg-white">
+              <div className="flex items-center justify-between px-4 py-3.5 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-lg bg-violet-100 flex items-center justify-center">
-                    <GraduationCap className="w-3.5 h-3.5 text-violet-600" />
+                  <div className="w-6 h-6 rounded-lg bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center">
+                    <GraduationCap className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
                   </div>
-                  <span className="text-sm font-bold text-slate-800">Chapters</span>
+                  <span className="text-sm font-bold text-slate-800 dark:text-slate-200">Chapters</span>
                 </div>
                 <motion.button
                   whileTap={{ scale: 0.92 }}
                   onClick={() => setIsDrawerOpen(false)}
-                  className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors"
+                  className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </motion.button>
@@ -219,7 +219,7 @@ function ChapterlistSidebar({ courseInfo }) {
       {/* Desktop sidebar */}
       <div className="hidden md:flex flex-col w-[280px] xl:w-[300px] flex-shrink-0
         h-[calc(100vh-64px)] sticky top-16
-        border-r border-slate-100 shadow-[1px_0_8px_rgba(0,0,0,0.04)]">
+        border-r border-slate-100 dark:border-slate-800 shadow-[1px_0_8px_rgba(0,0,0,0.04)] dark:shadow-none">
         <SidebarContent />
       </div>
     </>

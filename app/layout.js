@@ -3,6 +3,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Provider from "./Provider";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,24 +23,31 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300`}
       >
-        <Provider>
-        {children}
-        </Provider>
-        <Toaster
-          position="bottom-right"
-          expand={false}
-          visibleToasts={4}
-          toastOptions={{
-            unstyled: false,
-            classNames: {
-              toast: 'shadow-lg rounded-2xl border border-slate-200 bg-white',
-            },
-          }}
-        />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Provider>
+          {children}
+          </Provider>
+          <Toaster
+            position="bottom-right"
+            expand={false}
+            visibleToasts={4}
+            toastOptions={{
+              unstyled: false,
+              classNames: {
+                toast: 'shadow-lg rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900',
+              },
+            }}
+          />
+        </ThemeProvider>
       </body>
     </html>
     </ClerkProvider>

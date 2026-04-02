@@ -26,7 +26,7 @@ function EditCourse({ViewCourse=false}) {
     
 
   return (
-    <div className='bg-gradient-to-r from-slate-25 to-slate-50 via-slate-100'>
+    <div className='bg-gradient-to-r from-slate-50 to-slate-50 via-slate-100 dark:from-slate-950 dark:to-slate-950 dark:via-slate-900 min-h-screen'>
        
             <div className='w-full'>
                 <AppHeader/>

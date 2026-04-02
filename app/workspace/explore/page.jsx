@@ -44,7 +44,7 @@ function Explore() {
   })
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-transparent">
       <AppHeader />
 
       <div className="max-w-7xl mx-auto px-6 py-8">
@@ -56,12 +56,12 @@ function Explore() {
         >
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600
-              flex items-center justify-center shadow-md shadow-violet-200">
+              flex items-center justify-center shadow-md shadow-violet-200 dark:shadow-none">
               <CompassIcon className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-800">Explore Courses</h1>
-              <p className="text-sm text-slate-400">Discover and enroll in courses that match your goals</p>
+              <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-200">Explore Courses</h1>
+              <p className="text-sm text-slate-400 dark:text-slate-500">Discover and enroll in courses that match your goals</p>
             </div>
           </div>
         </motion.div>
@@ -80,10 +80,10 @@ function Explore() {
               placeholder="Search courses by name or description..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 bg-white
-                text-sm text-slate-700 placeholder:text-slate-400
-                focus:outline-none focus:ring-2 focus:ring-violet-400/30 focus:border-violet-300
-                transition-all shadow-sm"
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900
+                text-sm text-slate-700 dark:text-slate-300 placeholder:text-slate-400
+                focus:outline-none focus:ring-2 focus:ring-violet-400/30 focus:border-violet-300 dark:focus:ring-violet-500/30 dark:focus:border-violet-500
+                transition-all shadow-sm dark:shadow-none"
             />
             {search && (
               <button onClick={() => setSearch("")}
@@ -107,8 +107,8 @@ function Explore() {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200
                 ${activeCategory === cat
-                  ? 'bg-violet-600 text-white border-violet-600 shadow-sm shadow-violet-200'
-                  : 'bg-white text-slate-500 border-slate-200 hover:border-violet-300 hover:text-violet-600'}`}
+                  ? 'bg-violet-600 text-white border-violet-600 shadow-sm shadow-violet-200 dark:shadow-none'
+                  : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-violet-500/50 hover:text-violet-600 dark:hover:text-violet-400'}`}
             >
               {cat}
             </button>
@@ -117,9 +117,9 @@ function Explore() {
 
         {/* Results count */}
         {!isLoading && (
-          <p className="text-sm text-slate-400 mb-4">
+          <p className="text-sm text-slate-400 dark:text-slate-500 mb-4">
             {filtered.length} course{filtered.length !== 1 ? 's' : ''} found
-            {search && <span> for "<span className="text-slate-600 font-medium">{search}</span>"</span>}
+            {search && <span> for "<span className="text-slate-600 dark:text-slate-300 font-medium">{search}</span>"</span>}
           </p>
         )}
 
@@ -127,7 +127,7 @@ function Explore() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[0, 1, 2, 3, 4, 5].map(i => (
-              <div key={i} className="rounded-2xl bg-slate-200 animate-pulse h-72" />
+              <div key={i} className="rounded-2xl bg-slate-200 dark:bg-slate-800 animate-pulse h-72" />
             ))}
           </div>
         ) : filtered.length > 0 ? (
@@ -152,10 +152,10 @@ function Explore() {
           </motion.div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20
-            border-2 border-dashed border-slate-200 rounded-2xl">
-            <Search className="w-10 h-10 text-slate-300 mb-3" />
-            <p className="font-semibold text-slate-500">No courses found</p>
-            <p className="text-sm text-slate-400 mt-1">Try a different search term</p>
+            border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
+            <Search className="w-10 h-10 text-slate-300 dark:text-slate-700 mb-3" />
+            <p className="font-semibold text-slate-500 dark:text-slate-400">No courses found</p>
+            <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">Try a different search term</p>
           </div>
         )}
       </div>

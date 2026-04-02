@@ -23,33 +23,33 @@ function Profile() {
       icon: BookOpen,
       label: 'Courses Enrolled',
       value: stats?.enrolledCount ?? 0,
-      color: 'text-violet-600',
-      bg: 'bg-violet-50',
-      border: 'border-violet-100',
+      color: 'text-violet-600 dark:text-violet-400',
+      bg: 'bg-violet-50 dark:bg-violet-500/10',
+      border: 'border-violet-100 dark:border-violet-500/20',
     },
     {
       icon: Trophy,
       label: 'Completed',
       value: stats?.completedCount ?? 0,
       color: 'text-amber-500',
-      bg: 'bg-amber-50',
-      border: 'border-amber-100',
+      bg: 'bg-amber-50 dark:bg-amber-500/10',
+      border: 'border-amber-100 dark:border-amber-500/20',
     },
     {
       icon: Flame,
       label: 'Day Streak',
       value: stats?.streak ?? 0,
       color: 'text-orange-500',
-      bg: 'bg-orange-50',
-      border: 'border-orange-100',
+      bg: 'bg-orange-50 dark:bg-orange-500/10',
+      border: 'border-orange-100 dark:border-orange-500/20',
     },
     {
       icon: TrendingUp,
       label: 'XP Earned',
       value: stats?.xpDisplay ?? '0',
-      color: 'text-emerald-600',
-      bg: 'bg-emerald-50',
-      border: 'border-emerald-100',
+      color: 'text-emerald-600 dark:text-emerald-400',
+      bg: 'bg-emerald-50 dark:bg-emerald-500/10',
+      border: 'border-emerald-100 dark:border-emerald-500/20',
     },
   ]
 
@@ -88,7 +88,7 @@ function Profile() {
   )
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-transparent">
       <AppHeader />
 
       <div className="max-w-6xl mx-auto px-6 py-8">
@@ -97,8 +97,8 @@ function Profile() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 via-violet-700 to-fuchsia-700
-            p-6 sm:p-8 mb-6 shadow-lg shadow-violet-200"
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 via-violet-700 to-fuchsia-700 dark:from-violet-900 dark:via-violet-950 dark:to-fuchsia-950
+            p-6 sm:p-8 mb-6 shadow-lg shadow-violet-200 dark:shadow-none border border-transparent dark:border-violet-500/20"
         >
           <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-1/4 w-36 h-36 bg-fuchsia-400/20 rounded-full blur-2xl pointer-events-none" />
@@ -155,18 +155,18 @@ function Profile() {
             <motion.div
               key={label}
               whileHover={{ y: -2 }}
-              className={`flex items-center gap-3 p-4 rounded-2xl border ${border} bg-white shadow-sm`}
+              className={`flex items-center gap-3 p-4 rounded-2xl border ${border} bg-white dark:bg-slate-900 shadow-sm dark:shadow-none`}
             >
               <div className={`w-9 h-9 rounded-xl ${bg} border ${border} flex items-center justify-center flex-shrink-0`}>
                 <Icon className={`w-4 h-4 ${color}`} />
               </div>
               <div>
                 {loading ? (
-                  <div className="w-8 h-5 bg-slate-200 rounded animate-pulse mb-1" />
+                  <div className="w-8 h-5 bg-slate-200 dark:bg-slate-800 rounded animate-pulse mb-1" />
                 ) : (
-                  <p className="text-xl font-bold text-slate-800 leading-none">{value}</p>
+                  <p className="text-xl font-bold text-slate-800 dark:text-slate-200 leading-none">{value}</p>
                 )}
-                <p className="text-[11px] text-slate-400 mt-0.5">{label}</p>
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{label}</p>
               </div>
             </motion.div>
           ))}
@@ -180,15 +180,15 @@ function Profile() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden"
+            className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none overflow-hidden"
           >
-            <div className="flex items-center gap-2.5 px-6 pt-5 pb-4 border-b border-slate-100">
-              <div className="w-8 h-8 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center">
-                <UserCircle2 className="w-4 h-4 text-violet-600" />
+            <div className="flex items-center gap-2.5 px-6 pt-5 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="w-8 h-8 rounded-lg bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20 flex items-center justify-center">
+                <UserCircle2 className="w-4 h-4 text-violet-600 dark:text-violet-400" />
               </div>
-              <h2 className="text-base font-bold text-slate-800">Account Settings</h2>
+              <h2 className="text-base font-bold text-slate-800 dark:text-slate-200">Account Settings</h2>
             </div>
-            <div className="p-2">
+            <div className={`p-2 ${ "dark:filter dark:grayscale grayscale-0" /* Basic fallback for Clerk UI */ }`}>
               <UserProfile routing="hash" />
             </div>
           </motion.div>
@@ -201,13 +201,13 @@ function Profile() {
               initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-3xl border border-slate-200 shadow-sm p-5"
+              className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none p-5"
             >
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="w-4 h-4 text-amber-500" />
-                <h3 className="text-sm font-bold text-slate-800">Achievements</h3>
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">Achievements</h3>
                 {!loading && (
-                  <span className="ml-auto text-xs text-slate-400">
+                  <span className="ml-auto text-xs text-slate-400 dark:text-slate-500">
                     {badges.filter(b => b.unlocked).length}/{badges.length} unlocked
                   </span>
                 )}
@@ -216,7 +216,7 @@ function Profile() {
               {loading ? (
                 <div className="grid grid-cols-2 gap-2.5">
                   {[0,1,2,3].map(i => (
-                    <div key={i} className="h-20 rounded-2xl bg-slate-100 animate-pulse" />
+                    <div key={i} className="h-20 rounded-2xl bg-slate-100 dark:bg-slate-800 animate-pulse" />
                   ))}
                 </div>
               ) : (
@@ -227,12 +227,12 @@ function Profile() {
                       whileHover={{ scale: 1.04 }}
                       className={`flex flex-col items-center text-center p-3 rounded-2xl border transition-all
                         ${unlocked
-                          ? 'bg-violet-50 border-violet-200 hover:bg-violet-100'
-                          : 'bg-slate-50 border-slate-200 opacity-50 grayscale'}`}
+                          ? 'bg-violet-50 dark:bg-violet-500/10 border-violet-200 dark:border-violet-500/20 hover:bg-violet-100 dark:hover:bg-violet-500/20'
+                          : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 opacity-50 grayscale'}`}
                     >
                       <span className="text-2xl mb-1">{emoji}</span>
-                      <p className="text-xs font-semibold text-slate-700 leading-tight">{label}</p>
-                      <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">{desc}</p>
+                      <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 leading-tight">{label}</p>
+                      <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 leading-tight">{desc}</p>
                       {unlocked && (
                         <span className="mt-1 text-[9px] font-bold text-violet-600 bg-violet-100 px-1.5 py-0.5 rounded-full">
                           Unlocked
@@ -249,26 +249,26 @@ function Profile() {
               initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.25 }}
-              className="bg-white rounded-3xl border border-slate-200 shadow-sm p-5"
+              className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none p-5"
             >
-              <h3 className="text-sm font-bold text-slate-800 mb-3">Quick Links</h3>
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 mb-3">Quick Links</h3>
               <div className="space-y-2">
                 {[
-                  { icon: BookOpen, label: 'My Learning',      href: '/workspace/my-learning', color: 'text-violet-600',  bg: 'bg-violet-50' },
-                  { icon: Clock,    label: 'All Courses',      href: '/workspace/explore',     color: 'text-fuchsia-600', bg: 'bg-fuchsia-50' },
-                  { icon: Shield,   label: 'Privacy Settings', href: '#',                      color: 'text-slate-500',   bg: 'bg-slate-100' },
+                  { icon: BookOpen, label: 'My Learning',      href: '/workspace/my-learning', color: 'text-violet-600 dark:text-violet-400',  bg: 'bg-violet-50 dark:bg-violet-500/10' },
+                  { icon: Clock,    label: 'All Courses',      href: '/workspace/explore',     color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-50 dark:bg-fuchsia-500/10' },
+                  { icon: Shield,   label: 'Privacy Settings', href: '#',                      color: 'text-slate-500 dark:text-slate-400',   bg: 'bg-slate-100 dark:bg-slate-800' },
                 ].map(({ icon: Icon, label, href, color, bg }) => (
                   <a
                     key={label}
                     href={href}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50
-                      border border-transparent hover:border-slate-200 transition-all group"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50
+                      border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all group"
                   >
                     <span className={`w-7 h-7 rounded-lg ${bg} flex items-center justify-center flex-shrink-0`}>
                       <Icon className={`w-3.5 h-3.5 ${color}`} />
                     </span>
-                    <span className="text-sm text-slate-600 group-hover:text-slate-900 font-medium">{label}</span>
-                    <span className="ml-auto text-slate-300 group-hover:text-slate-500">→</span>
+                    <span className="text-sm text-slate-600 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100 font-medium">{label}</span>
+                    <span className="ml-auto text-slate-300 dark:text-slate-600 group-hover:text-slate-500 dark:group-hover:text-slate-400">→</span>
                   </a>
                 ))}
               </div>
@@ -279,11 +279,11 @@ function Profile() {
               initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-gradient-to-br from-violet-50 to-fuchsia-50 rounded-3xl border border-violet-100 p-5"
+              className="bg-gradient-to-br from-violet-50 dark:from-slate-900 to-fuchsia-50 dark:to-slate-950 rounded-3xl border border-violet-100 dark:border-slate-800 p-5"
             >
               <div className="flex items-center gap-2 mb-3">
                 <Flame className="w-4 h-4 text-orange-500" />
-                <h3 className="text-sm font-bold text-slate-800">Activity</h3>
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">Activity</h3>
               </div>
 
               {loading ? (
@@ -300,16 +300,16 @@ function Profile() {
                   <div className="flex gap-1.5 justify-between">
                     {['M','T','W','T','F','S','S'].map((day, i) => {
                       const l = weekActivity[i]
-                      const colors = ['bg-slate-200','bg-violet-200','bg-violet-400','bg-violet-500','bg-violet-700']
+                      const colors = ['bg-slate-200 dark:bg-slate-800','bg-violet-200 dark:bg-violet-900','bg-violet-400 dark:bg-violet-700','bg-violet-500','bg-violet-700 dark:bg-violet-400']
                       return (
                         <div key={i} className="flex flex-col items-center gap-1.5">
                           <div className={`w-7 h-7 rounded-lg ${colors[l]}`} />
-                          <span className="text-[10px] text-slate-400">{day}</span>
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500">{day}</span>
                         </div>
                       )
                     })}
                   </div>
-                  <p className="text-xs text-slate-500 mt-3">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-3">
                     {(stats?.streak ?? 0) > 0
                       ? `🔥 ${stats.streak}-day streak! Keep it up.`
                       : '📚 Start learning to build your streak!'}

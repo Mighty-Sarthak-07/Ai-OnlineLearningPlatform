@@ -7,8 +7,8 @@ function ChapterTopicList({course}) {
     const courseLayout = course?.courseJson?.course;
     console.log(courseLayout);
     return (
-      <div className='bg-white p-4 rounded-xl shadow-lg'>
-        <h2 className='text-3xl font-extrabold text-center mb-8 tracking-tight'>Chapter & Topics</h2>
+      <div className='bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 p-4 rounded-xl shadow-lg dark:shadow-none'>
+        <h2 className='text-3xl font-extrabold text-center mb-8 tracking-tight dark:text-slate-200'>Chapter & Topics</h2>
         <div className="flex flex-col items-center justify-center mt-6 gap-12">
           <AnimatePresence>
             {courseLayout?.chapters.map((chapter, chapterIdx) => (
@@ -22,7 +22,7 @@ function ChapterTopicList({course}) {
               >
                 <motion.div
                   whileHover={{ scale: 1.03, boxShadow: '0 8px 32px rgba(80,0,200,0.15)' }}
-                  className="p-6 border-2 border-purple-200 shadow-lg rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white w-full max-w-xl transition-all duration-300 mb-8"
+                  className="p-6 border-2 border-purple-200 dark:border-purple-500/30 shadow-lg dark:shadow-none rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white w-full max-w-xl transition-all duration-300 mb-8"
                 >
                   <h2 className="text-center text-lg font-semibold tracking-wide mb-1">Chapter {chapterIdx + 1}</h2>
                   <h2 className="font-bold text-2xl text-center mb-2">{chapter.chapterName}</h2>
@@ -34,7 +34,7 @@ function ChapterTopicList({course}) {
                 {/* Timeline for topics */}
                 <div className="relative w-full flex flex-col items-center">
                   {/* Central vertical line - hidden on mobile */}
-                  <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gray-300 z-0 hidden md:block" style={{transform: 'translateX(-50%)'}} />
+                  <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gray-300 dark:bg-gray-800 z-0 hidden md:block" style={{transform: 'translateX(-50%)'}} />
                   <AnimatePresence>
                     {chapter?.topics.map((topic, topicIdx) => {
                       const isLeft = topicIdx % 2 === 0;
@@ -49,9 +49,9 @@ function ChapterTopicList({course}) {
                           >
                             {/* Mobile layout - straight vertical list */}
                             <div className="md:hidden w-full flex items-center justify-center">
-                              <div className="flex items-center gap-3 bg-gray-100 rounded-lg shadow-sm px-6 py-3 hover:bg-purple-50 transition-colors duration-200 w-full max-w-md">
-                                <span className="text-gray-500 font-bold text-lg w-8 text-center">{topicIdx + 1}</span>
-                                <span className="flex-1 text-gray-800 font-medium">{topic}</span>
+                              <div className="flex items-center gap-3 bg-gray-100 dark:bg-slate-800 rounded-lg shadow-sm px-6 py-3 hover:bg-purple-50 dark:hover:bg-purple-500/10 transition-colors duration-200 w-full max-w-md border border-transparent dark:border-slate-700">
+                                <span className="text-gray-500 dark:text-gray-400 font-bold text-lg w-8 text-center">{topicIdx + 1}</span>
+                                <span className="flex-1 text-gray-800 dark:text-gray-200 font-medium">{topic}</span>
                                 {topicIdx === chapter?.topics?.length - 1 && (
                                   <motion.span
                                     initial={{ scale: 0 }}
@@ -70,9 +70,9 @@ function ChapterTopicList({course}) {
                               <div className={`flex-1 flex ${isLeft ? 'justify-end' : 'justify-start'} pr-4 pl-4`}> 
                                 {isLeft && (
                                   <div className="max-w-md w-fit">
-                                    <div className="flex items-center gap-3 bg-gray-100 rounded-lg shadow-sm px-6 py-3 hover:bg-purple-50 transition-colors duration-200">
-                                      <span className="text-gray-500 font-bold text-lg w-8 text-center">{topicIdx + 1}</span>
-                                      <span className="flex-1 text-gray-800 font-medium">{topic}</span>
+                                    <div className="flex items-center gap-3 bg-gray-100 dark:bg-slate-800 rounded-lg shadow-sm px-6 py-3 hover:bg-purple-50 dark:hover:bg-purple-500/10 transition-colors duration-200 border border-transparent dark:border-slate-700">
+                                      <span className="text-gray-500 dark:text-gray-400 font-bold text-lg w-8 text-center">{topicIdx + 1}</span>
+                                      <span className="flex-1 text-gray-800 dark:text-gray-200 font-medium">{topic}</span>
                                       {topicIdx === chapter?.topics?.length - 1 && (
                                         <motion.span
                                           initial={{ scale: 0 }}
@@ -88,15 +88,15 @@ function ChapterTopicList({course}) {
                               </div>
                               {/* Timeline dot */}
                               <div className="flex flex-col items-center z-20">
-                                <span className="w-5 h-5 rounded-full bg-purple-500 border-4 border-white shadow-md" />
+                                <span className="w-5 h-5 rounded-full bg-purple-500 border-4 border-white dark:border-slate-900 shadow-md" />
                               </div>
                               {/* Right side */}
                               <div className={`flex-1 flex ${!isLeft ? 'justify-start' : 'justify-end'} pr-4 pl-4`}>
                                 {!isLeft && (
                                   <div className="max-w-md w-fit">
-                                    <div className="flex items-center gap-3 bg-gray-100 rounded-lg shadow-sm px-6 py-3 hover:bg-purple-50 transition-colors duration-200">
-                                      <span className="text-gray-500 font-bold text-lg w-8 text-center">{topicIdx + 1}</span>
-                                      <span className="flex-1 text-gray-800 font-medium">{topic}</span>
+                                    <div className="flex items-center gap-3 bg-gray-100 dark:bg-slate-800 rounded-lg shadow-sm px-6 py-3 hover:bg-purple-50 dark:hover:bg-purple-500/10 transition-colors duration-200 border border-transparent dark:border-slate-700">
+                                      <span className="text-gray-500 dark:text-gray-400 font-bold text-lg w-8 text-center">{topicIdx + 1}</span>
+                                      <span className="flex-1 text-gray-800 dark:text-gray-200 font-medium">{topic}</span>
                                       {topicIdx === chapter?.topics?.length - 1 && (
                                         <motion.span
                                           initial={{ scale: 0 }}

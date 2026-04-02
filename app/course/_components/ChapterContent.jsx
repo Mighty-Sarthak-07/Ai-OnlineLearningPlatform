@@ -72,19 +72,19 @@ function ChapterContent({ courseInfo, refreshData }) {
 
   if (!courseContent?.[selectedChapter]) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-slate-50 min-h-screen">
+      <div className="flex-1 flex items-center justify-center bg-transparent min-h-screen">
         <div className="text-center space-y-3">
-          <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto">
-            <BookOpen className="w-7 h-7 text-slate-300" />
+          <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto">
+            <BookOpen className="w-7 h-7 text-slate-300 dark:text-slate-600" />
           </div>
-          <p className="text-slate-400 text-sm">Select a chapter to get started</p>
+          <p className="text-slate-400 dark:text-slate-500 text-sm">Select a chapter to get started</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 min-h-screen bg-slate-50 text-slate-800 overflow-y-auto">
+    <div className="flex-1 min-h-screen bg-transparent text-slate-800 dark:text-slate-200 overflow-y-auto">
       <AnimatePresence mode="wait">
         <motion.div
           key={selectedChapter}
@@ -96,7 +96,7 @@ function ChapterContent({ courseInfo, refreshData }) {
         >
           {/* Chapter header */}
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8
-            bg-white rounded-2xl border border-slate-100 shadow-sm px-6 py-5">
+            bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none px-6 py-5">
             <div className="min-w-0">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-xs font-semibold text-violet-600 uppercase tracking-widest">
@@ -104,12 +104,12 @@ function ChapterContent({ courseInfo, refreshData }) {
                 </span>
                 {isCompleted && (
                   <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5
-                    bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full">
+                    bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 rounded-full">
                     <CheckCircle2 className="w-3 h-3" /> Completed
                   </span>
                 )}
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 leading-tight">
                 {chapterName}
               </h1>
             </div>
@@ -137,7 +137,7 @@ function ChapterContent({ courseInfo, refreshData }) {
               </motion.button>
             ) : (
               <div className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl
-                bg-emerald-50 text-emerald-600 border border-emerald-200
+                bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20
                 text-sm font-semibold">
                 <CheckCircle2 className="w-4 h-4" />
                 Completed
@@ -149,11 +149,11 @@ function ChapterContent({ courseInfo, refreshData }) {
           {VideoData?.length > 0 && (
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-violet-50 border border-violet-200 flex items-center justify-center">
-                  <PlayCircle className="w-4 h-4 text-violet-600" />
+                <div className="w-8 h-8 rounded-lg bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20 flex items-center justify-center">
+                  <PlayCircle className="w-4 h-4 text-violet-600 dark:text-violet-400" />
                 </div>
-                <h2 className="text-lg font-bold text-slate-800">Related Videos</h2>
-                <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+                <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200">Related Videos</h2>
+                <span className="text-xs text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
                   {Math.min(VideoData.length, 4)} videos
                 </span>
               </div>
@@ -165,8 +165,8 @@ function ChapterContent({ courseInfo, refreshData }) {
                     initial={{ opacity: 0, scale: 0.97 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: index * 0.08 }}
-                    className="rounded-2xl overflow-hidden border border-slate-200 bg-white
-                      shadow-sm hover:shadow-md hover:border-violet-200 transition-all duration-200"
+                    className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900
+                      shadow-sm dark:shadow-none hover:shadow-md hover:border-violet-200 dark:hover:border-violet-500/50 transition-all duration-200"
                   >
                     <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                       <div className="absolute inset-0">
@@ -192,11 +192,11 @@ function ChapterContent({ courseInfo, refreshData }) {
           {topics?.length > 0 && (
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-fuchsia-50 border border-fuchsia-200 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-fuchsia-500" />
+                <div className="w-8 h-8 rounded-lg bg-fuchsia-50 dark:bg-fuchsia-500/10 border border-fuchsia-200 dark:border-fuchsia-500/20 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-fuchsia-500 dark:text-fuchsia-400" />
                 </div>
-                <h2 className="text-lg font-bold text-slate-800">Chapter Content</h2>
-                <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+                <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200">Chapter Content</h2>
+                <span className="text-xs text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
                   {topics.length} topics
                 </span>
               </div>
@@ -208,24 +208,24 @@ function ChapterContent({ courseInfo, refreshData }) {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.06 }}
-                    className="group rounded-2xl border border-slate-200 bg-white
-                      shadow-sm hover:shadow-md hover:border-violet-200
+                    className="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900
+                      shadow-sm dark:shadow-none hover:shadow-md hover:border-violet-200 dark:hover:border-violet-500/50
                       transition-all duration-300 overflow-hidden"
                   >
                     {/* Topic header */}
-                    <div className="flex items-center gap-3 px-5 pt-5 pb-3 border-b border-slate-50">
-                      <div className="w-6 h-6 rounded-md bg-violet-50 border border-violet-200
-                        flex items-center justify-center flex-shrink-0 text-xs font-bold text-violet-600">
+                    <div className="flex items-center gap-3 px-5 pt-5 pb-3 border-b border-slate-50 dark:border-slate-800/50">
+                      <div className="w-6 h-6 rounded-md bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20
+                        flex items-center justify-center flex-shrink-0 text-xs font-bold text-violet-600 dark:text-violet-400">
                         {index + 1}
                       </div>
-                      <h3 className="text-base font-semibold text-slate-800 leading-snug">
+                      <h3 className="text-base font-semibold text-slate-800 dark:text-slate-200 leading-snug">
                         {topic?.topic}
                       </h3>
                     </div>
 
                     {/* Topic content */}
                     <div
-                      className="px-5 pb-5 pt-3 prose-light text-slate-600 text-sm leading-relaxed"
+                      className="px-5 pb-5 pt-3 prose-light dark:prose-invert text-slate-600 dark:text-slate-300 text-sm leading-relaxed"
                       dangerouslySetInnerHTML={{ __html: topic?.content }}
                       style={{ lineHeight: '1.9' }}
                     />
@@ -238,10 +238,10 @@ function ChapterContent({ courseInfo, refreshData }) {
           {/* Empty state */}
           {!topics?.length && !VideoData?.length && (
             <div className="flex flex-col items-center justify-center py-20">
-              <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-3">
-                <BookOpen className="w-7 h-7 text-slate-300" />
+              <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+                <BookOpen className="w-7 h-7 text-slate-300 dark:text-slate-600" />
               </div>
-              <p className="text-slate-400 text-sm">No content available for this chapter yet.</p>
+              <p className="text-slate-400 dark:text-slate-500 text-sm">No content available for this chapter yet.</p>
             </div>
           )}
         </motion.div>

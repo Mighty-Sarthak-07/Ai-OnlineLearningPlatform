@@ -32,23 +32,23 @@ function Course() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-transparent">
       <AppHeader hideSidebar={true} />
 
       {loading ? (
-        <div className="flex-1 flex items-center justify-center bg-slate-50">
+        <div className="flex-1 flex items-center justify-center bg-transparent">
           <motion.div
             className="flex flex-col items-center gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
             <div className="relative w-16 h-16">
-              <div className="absolute inset-0 rounded-full bg-violet-200 animate-ping opacity-60" />
-              <div className="relative w-16 h-16 rounded-full bg-violet-50 border border-violet-200 flex items-center justify-center shadow-sm">
-                <Loader2 className="w-7 h-7 text-violet-500 animate-spin" />
+              <div className="absolute inset-0 rounded-full bg-violet-200 dark:bg-violet-900 animate-ping opacity-60" />
+              <div className="relative w-16 h-16 rounded-full bg-violet-50 dark:bg-violet-950 border border-violet-200 dark:border-violet-800 flex items-center justify-center shadow-sm dark:shadow-none">
+                <Loader2 className="w-7 h-7 text-violet-500 dark:text-violet-400 animate-spin" />
               </div>
             </div>
-            <p className="text-slate-400 text-sm font-medium">Loading course...</p>
+            <p className="text-slate-400 dark:text-slate-500 text-sm font-medium">Loading course...</p>
           </motion.div>
         </div>
       ) : (

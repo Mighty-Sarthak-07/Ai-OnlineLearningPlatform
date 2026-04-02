@@ -19,10 +19,10 @@ function EnrollCourseCard({ course, enrollCourse }) {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -3 }}
       transition={{ duration: 0.3 }}
-      className="group bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-violet-200 transition-all duration-300 flex flex-col overflow-hidden"
+      className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none hover:shadow-md hover:border-violet-200 dark:hover:border-violet-500/50 transition-all duration-300 flex flex-col overflow-hidden"
     >
       {/* Banner */}
-      <div className="relative aspect-video overflow-hidden bg-slate-100">
+      <div className="relative aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800">
         <Image
           src={course?.bannerImageUrl ?? '/online.jpg'}
           alt={courseJson?.name ?? 'Course'}
@@ -49,10 +49,10 @@ function EnrollCourseCard({ course, enrollCourse }) {
       {/* Body */}
       <div className="flex flex-col gap-3 p-4 flex-1">
         <div>
-          <h3 className="font-bold text-slate-800 text-base leading-snug line-clamp-1">
+          <h3 className="font-bold text-slate-800 dark:text-slate-200 text-base leading-snug line-clamp-1">
             {courseJson?.name ?? 'Untitled Course'}
           </h3>
-          <p className="text-sm text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">
             {courseJson?.description ?? 'No description available'}
           </p>
         </div>
@@ -60,12 +60,12 @@ function EnrollCourseCard({ course, enrollCourse }) {
         {/* Progress section */}
         <div className="space-y-1.5">
           <div className="flex justify-between items-center">
-            <span className="text-xs font-medium text-slate-500">Progress</span>
-            <span className={`text-xs font-bold ${isDone ? 'text-emerald-600' : 'text-violet-600'}`}>
+            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Progress</span>
+            <span className={`text-xs font-bold ${isDone ? 'text-emerald-600 dark:text-emerald-400' : 'text-violet-600 dark:text-violet-400'}`}>
               {isDone ? '✓ Complete!' : `${progress}%`}
             </span>
           </div>
-          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+          <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
             <motion.div
               className={`h-full rounded-full ${isDone ? 'bg-emerald-400' : 'bg-gradient-to-r from-violet-500 to-fuchsia-500'}`}
               initial={{ width: 0 }}
@@ -73,7 +73,7 @@ function EnrollCourseCard({ course, enrollCourse }) {
               transition={{ duration: 0.8, ease: 'easeOut' }}
             />
           </div>
-          <p className="text-[11px] text-slate-400">{completed} / {total} chapters done</p>
+          <p className="text-[11px] text-slate-400 dark:text-slate-500">{completed} / {total} chapters done</p>
         </div>
 
         {/* CTA */}
@@ -85,8 +85,8 @@ function EnrollCourseCard({ course, enrollCourse }) {
               className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl
                 text-sm font-semibold transition-all duration-200
                 ${isDone
-                  ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100'
-                  : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-sm shadow-violet-200 hover:shadow-md hover:shadow-violet-300'}
+                  ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30 hover:bg-emerald-100 dark:hover:bg-emerald-500/20'
+                  : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-sm shadow-violet-200 dark:shadow-violet-900/50 hover:shadow-md hover:shadow-violet-300 dark:hover:shadow-violet-800/80'}
               `}
             >
               {isDone
