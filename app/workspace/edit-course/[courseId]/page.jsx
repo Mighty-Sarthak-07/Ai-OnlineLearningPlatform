@@ -25,7 +25,7 @@ function EditCourse({ViewCourse=false}) {
                 setCourse(response.data);
             } else {
                 console.error("Course not found");
-                // Optional: router.push('/workspace')
+                
             }
         } catch (error) {
             console.error("Failed to fetch course details:", error);

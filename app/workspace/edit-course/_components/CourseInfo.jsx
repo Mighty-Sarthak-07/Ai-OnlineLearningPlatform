@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
-import { motion } from 'framer-motion';
-import { BookOpen, BoxIcon, Clock, Loader2, PlayCircleIcon, TrendingUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { BookOpen, BoxIcon, Clock, Loader2, PlayCircleIcon, TrendingUp, X } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -17,6 +17,8 @@ function CourseInfo({course,ViewCourse}) {
     const router = useRouter();
     const { openTaskModal, setNewTasksAdded } = useTaskModal();
     const [aiLoading, setAiLoading] = useState(false);
+    const [showDeadlineModal, setShowDeadlineModal] = useState(false);
+    const [deadlineInput, setDeadlineInput] = useState(() => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
 
     const GetCourseContent = async () => {
       setLoading(true);
@@ -44,8 +46,8 @@ function CourseInfo({course,ViewCourse}) {
       }
     }
 
-    const PlanWithAI = async () => {
-      const deadline = prompt("By when do you want to complete this course? (YYYY-MM-DD)", new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
+    const executeAiPlan = async (deadline) => {
+      setShowDeadlineModal(false);
       if (!deadline) return;
 
       setAiLoading(true);
@@ -77,7 +79,8 @@ function CourseInfo({course,ViewCourse}) {
       } catch (error) {
         console.error(error);
         setAiLoading(false);
-        toast.error("Failed to generate AI plan. Please try again.");
+        const serverDetail = error.response?.data?.details || error.response?.data?.error;
+        toast.error(`Error: ${serverDetail || 'Failed to generate AI plan'}`);
       }
     }
 
@@ -132,7 +135,7 @@ function CourseInfo({course,ViewCourse}) {
               <Button 
                 variant="outline"
                 className='text-lg mx-2 border-2 border-violet-500 text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:scale-[1.05] ease-in-out duration-300 md:w-[250px] flex items-center gap-2'
-                onClick={PlanWithAI}
+                onClick={() => setShowDeadlineModal(true)}
                 disabled={aiLoading}
               >
                 {aiLoading ? <Loader2 className='w-5 h-5 animate-spin'/> : <Sparkles className='w-5 h-5'/>} 
@@ -159,6 +162,65 @@ function CourseInfo({course,ViewCourse}) {
             />
           ) : null}
         </motion.div>
+
+        <AnimatePresence>
+          {showDeadlineModal && (
+            <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 15 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[20px] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden"
+              >
+                <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-800 bg-violet-50/50 dark:bg-violet-900/10">
+                  <div className="flex items-center gap-2.5 text-violet-600 dark:text-violet-400 font-bold tracking-tight">
+                    <Sparkles className="w-5 h-5" />
+                    AI Study Assistant
+                  </div>
+                  <button 
+                    onClick={() => setShowDeadlineModal(false)}
+                    className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="p-6">
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-5 leading-relaxed">
+                    Choose your target completion date. The AI will distribute bite-sized learning tasks evenly across your calendar to perfectly match your schedule.
+                  </p>
+                  <div className="mb-6">
+                    <label className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-1.5 uppercase tracking-wide">
+                      <CalendarIcon className="w-3.5 h-3.5"/> Target Date
+                    </label>
+                    <input 
+                      type="date"
+                      value={deadlineInput}
+                      onChange={(e) => setDeadlineInput(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 transition-all font-medium text-slate-800 dark:text-slate-200"
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+                  <div className="flex gap-3">
+                    <Button 
+                      variant="outline" 
+                      className="flex-1 rounded-xl h-11 border-slate-200 dark:border-slate-800"
+                      onClick={() => setShowDeadlineModal(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      className="flex-1 rounded-xl h-11 bg-violet-600 hover:bg-violet-700 text-white shadow-md shadow-violet-200 dark:shadow-none" 
+                      onClick={() => executeAiPlan(deadlineInput)}
+                    >
+                      Plan Schedule
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
       </motion.div>
     )
 }

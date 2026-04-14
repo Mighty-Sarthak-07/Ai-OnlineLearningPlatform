@@ -36,15 +36,14 @@ export async function POST(req) {
             apiKey: process.env.GEMINI_API_KEY,
         });
 
-        // Consistent with working implementation in generate-course-content
-        const modelName = 'gemini-1.5-flash';
+        const modelName = 'gemini-2.5-flash';
         const config = {
             responseMimeType: 'text/plain',
         };
 
         const promptText = PROMPT
-            .replace(/{courseTitle}/g, courseTitle)
-            .replace(/{chapters}/g, JSON.stringify(chapters))
+            .replace(/{courseTitle}/g, courseTitle || 'Unknown Course')
+            .replace(/{chapters}/g, JSON.stringify(chapters || []))
             .replace(/{deadline}/g, deadline)
             .replace(/{currentDate}/g, currentDate);
 
@@ -59,18 +58,30 @@ export async function POST(req) {
             },
         ];
         
-        const response = await ai.models.generateContent({
-            model: modelName,
-            config,
-            contents,
-        });
+        let response;
+        try {
+            response = await ai.models.generateContent({
+                model: modelName,
+                config,
+                contents,
+            });
+        } catch (genErr) {
+             console.error("GenAI Library Error:", genErr);
+             throw new Error(genErr.message || "Model failed to generate response.");
+        }
         
-        const rawResp = response?.candidates[0]?.content?.parts[0]?.text;
-        let cleanJson = rawResp.replace('```json', '').replace('```', '').trim();
+        const rawResp = response?.candidates?.[0]?.content?.parts?.[0]?.text || '{"tasks":[]}';
+        let cleanJson = rawResp.replace(/```json/gi, '').replace(/```/g, '').trim();
         
-        const tasks = JSON.parse(cleanJson);
+        let tasks = [];
+        try {
+            tasks = JSON.parse(cleanJson);
+        } catch(parseErr) {
+             console.error("Failed to parse JSON:", cleanJson);
+             throw new Error("AI returned invalid JSON format.");
+        }
 
-        return NextResponse.json(tasks);
+        return NextResponse.json(tasks.tasks ? tasks : { tasks });
     } catch (error) {
         console.error("AI Task Generation Error:", error);
         const isQuotaExceeded = error.message?.includes('429') || error.message?.toLowerCase().includes('quota');

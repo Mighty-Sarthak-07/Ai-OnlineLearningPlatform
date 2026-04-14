@@ -10,7 +10,8 @@ function WelcomeBanner() {
   const { user } = useUser();
   const firstName = user?.firstName ?? 'Learner';
   const { stats, loading } = useUserStats();
-  const { openTaskModal } = useTaskModal();
+  const { openTaskModal, tasks } = useTaskModal();
+  const pendingCount = tasks?.filter(t => t.status === 'Pending').length || 0;
 
   const statItems = [
     {
@@ -84,18 +85,33 @@ function WelcomeBanner() {
               onClick={openTaskModal}
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 text-white font-semibold shadow-sm border border-white/10 backdrop-blur-md transition-all text-sm mt-3"
             >
-              <ListTodo className="w-4 h-4" /> Manage Tasks
+              <div className="relative flex items-center">
+                <ListTodo className="w-4 h-4" />
+                {pendingCount > 0 && (
+                  <span className="absolute -top-1.5 -right-2 flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold leading-none text-white shadow-sm ring-1 ring-white/20">
+                    {pendingCount}
+                  </span>
+                )}
+              </div> 
+              Manage Tasks
             </motion.button>
           </div>
           
-          {/* Mobile Tasks Button */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={openTaskModal}
             className="sm:hidden flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-white/20 hover:bg-white/30 text-white font-semibold shadow-sm border border-white/10 backdrop-blur-md mt-1"
           >
-            <ListTodo className="w-4 h-4" /> Manage Tasks
+            <div className="relative flex items-center">
+              <ListTodo className="w-4 h-4" />
+              {pendingCount > 0 && (
+                <span className="absolute -top-1.5 -right-2 flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold leading-none text-white shadow-sm ring-1 ring-white/20">
+                  {pendingCount}
+                </span>
+              )}
+            </div> 
+            Manage Tasks
           </motion.button>
         </div>
       </div>

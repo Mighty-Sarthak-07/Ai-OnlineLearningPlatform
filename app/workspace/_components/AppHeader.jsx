@@ -30,7 +30,8 @@ function AppHeader({ hideSidebar = false }) {
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef = useRef(null);
   const { notifications, unreadCount, markAllRead, markRead, clearAll } = useNotifications();
-  const { toggleTaskModal } = useTaskModal();
+  const { toggleTaskModal, tasks } = useTaskModal();
+  const pendingCount = tasks?.filter(t => t.status === 'Pending').length || 0;
 
   // Close panel on outside click
   useEffect(() => {
@@ -101,7 +102,6 @@ function AppHeader({ hideSidebar = false }) {
         {/* Right: theme toggle + bell + avatar */}
         <div className="flex items-center gap-2" ref={panelRef}>
 
-          {/* ── Theme Toggle ── */}
           <ThemeToggle />
 
           {/* ── Tasks Toggle ── */}
@@ -109,12 +109,26 @@ function AppHeader({ hideSidebar = false }) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleTaskModal}
-            className="w-9 h-9 rounded-xl flex items-center justify-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-violet-50 dark:hover:bg-violet-500/10 hover:border-violet-200 dark:hover:border-violet-500/30 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200"
+            className="relative w-9 h-9 rounded-xl flex items-center justify-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-violet-50 dark:hover:bg-violet-500/10 hover:border-violet-200 dark:hover:border-violet-500/30 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200"
           >
             <ListTodo className="w-4 h-4" />
+            <AnimatePresence>
+              {pendingCount > 0 && (
+                <motion.span
+                  key="task-badge"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1
+                    bg-red-500 text-white text-[10px] font-bold rounded-full
+                    flex items-center justify-center shadow-sm shadow-red-200"
+                >
+                  {pendingCount > 9 ? '9+' : pendingCount}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </motion.button>
 
-          {/* ── Bell button ── */}
           <div className="relative">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -264,7 +278,6 @@ function AppHeader({ hideSidebar = false }) {
             </AnimatePresence>
           </div>
 
-          {/* User avatar */}
           <div className="flex items-center justify-center w-9 h-9">
             <UserButton
               appearance={{

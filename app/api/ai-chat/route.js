@@ -44,7 +44,7 @@ If the question is not related to education, technology, or learning, politely r
 
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const config = { responseMimeType: "text/plain" };
-    const model = "gemini-1.5-flash";
+    const model = "gemini-2.5-flash";
 
     const contents = [
       { role: "user", parts: [{ text: [systemPrompt, message].join("\n\nUser: ") }] }
