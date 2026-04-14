@@ -11,27 +11,45 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const courseId = searchParams?.get('courseId');
     const user = await currentUser();
-    if(courseId == 0){
-    const result = await db.select().from(coursesTable).where(sql`${coursesTable.courseContent}::jsonb != '{}'::jsonb`);
-    console.log(result);
-    return NextResponse.json(result);
+
+    if (courseId === "0") {
+      const result = await db
+        .select()
+        .from(coursesTable)
+        .where(sql`${coursesTable.courseContent} is not null and ${coursesTable.courseContent}::jsonb != '{}'::jsonb`);
+      return NextResponse.json(result);
     }
 
-    if(courseId){
-    const result = await db.select().from(coursesTable).where(eq(coursesTable.cid, courseId));
-    console.log(result);
-    return NextResponse.json(result[0]);
-  }
-  else{
-    const result = await db.select().from(coursesTable).where(eq(coursesTable.userEmail, user.primaryEmailAddress?.emailAddress)).orderBy(desc(coursesTable.id));
+    if (courseId) {
+      const result = await db
+        .select()
+        .from(coursesTable)
+        .where(eq(coursesTable.cid, courseId));
+      
+      return NextResponse.json(result[0] || null);
+    } 
+    
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    console.log(result);
+    const email = user.primaryEmailAddress?.emailAddress;
+    if (!email) {
+      return NextResponse.json({ error: "User email not found" }, { status: 400 });
+    }
+
+    const result = await db
+      .select()
+      .from(coursesTable)
+      .where(eq(coursesTable.userEmail, email))
+      .orderBy(desc(coursesTable.id));
 
     return NextResponse.json(result);
-  }
   } catch (error) {
-    console.error("API Error:", error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    console.error("API Error in courses route:", error);
+    return NextResponse.json({ 
+      error: "Internal Server Error", 
+      details: error.message 
+    }, { status: 500 });
   }
-
 }

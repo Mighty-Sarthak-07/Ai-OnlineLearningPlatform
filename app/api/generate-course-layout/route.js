@@ -88,7 +88,7 @@ export async function POST(req) {
     const config = {
       responseMimeType: 'text/plain',
     };
-    const model = 'gemini-2.0-flash';
+    const model = 'gemini-1.5-flash';
     const contents = [
       {
         role: 'user',
@@ -132,6 +132,9 @@ export async function POST(req) {
     return NextResponse.json({courseId:courseId});
   } catch (error) {
     console.error("API Error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const isQuotaExceeded = error.message?.includes('429') || error.message?.toLowerCase().includes('quota');
+    return NextResponse.json({ 
+      error: isQuotaExceeded ? "AI Quota Exceeded. Please try again in a few minutes or upgrade your plan." : error.message 
+    }, { status: isQuotaExceeded ? 429 : 500 });
   }
 }

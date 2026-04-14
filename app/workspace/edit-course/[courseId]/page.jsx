@@ -17,11 +17,21 @@ function EditCourse({ViewCourse=false}) {
     }, []);
 
     const GetCourseDetails = async () => {
-        setLoading(true);
-        const response = await axios.get('/api/courses?courseId='+courseId);
-        console.log(response.data);
-        setCourse(response.data);
-        setLoading(false);  
+        try {
+            setLoading(true);
+            const response = await axios.get('/api/courses?courseId='+courseId);
+            console.log(response.data);
+            if (response.data) {
+                setCourse(response.data);
+            } else {
+                console.error("Course not found");
+                // Optional: router.push('/workspace')
+            }
+        } catch (error) {
+            console.error("Failed to fetch course details:", error);
+        } finally {
+            setLoading(false);  
+        }
     }
     
 

@@ -2,13 +2,15 @@
 
 import { useUser } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
-import { BookOpen, Flame, Rocket, Star, Loader2 } from 'lucide-react';
+import { BookOpen, Flame, Rocket, Star, Loader2, ListTodo } from 'lucide-react';
 import { useUserStats } from '@/hooks/useUserStats';
+import { useTaskModal } from '@/context/TaskContext';
 
 function WelcomeBanner() {
   const { user } = useUser();
   const firstName = user?.firstName ?? 'Learner';
   const { stats, loading } = useUserStats();
+  const { openTaskModal } = useTaskModal();
 
   const statItems = [
     {
@@ -68,13 +70,33 @@ function WelcomeBanner() {
                   : 'Ready to start your learning journey? 🚀'}
             </p>
           </div>
-          <motion.div
-            animate={{ rotate: [0, 8, -8, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            className="text-5xl hidden sm:block"
+          <div className="flex flex-col sm:items-end gap-3 hidden sm:flex">
+            <motion.div
+              animate={{ rotate: [0, 8, -8, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              className="text-5xl"
+            >
+              🎓
+            </motion.div>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={openTaskModal}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 text-white font-semibold shadow-sm border border-white/10 backdrop-blur-md transition-all text-sm mt-3"
+            >
+              <ListTodo className="w-4 h-4" /> Manage Tasks
+            </motion.button>
+          </div>
+          
+          {/* Mobile Tasks Button */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={openTaskModal}
+            className="sm:hidden flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-white/20 hover:bg-white/30 text-white font-semibold shadow-sm border border-white/10 backdrop-blur-md mt-1"
           >
-            🎓
-          </motion.div>
+            <ListTodo className="w-4 h-4" /> Manage Tasks
+          </motion.button>
         </div>
       </div>
 

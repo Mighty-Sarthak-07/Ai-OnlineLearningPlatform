@@ -41,7 +41,7 @@ export async function POST(req) {
                 const config = {
                     responseMimeType: 'text/plain',
                 };
-                const model = 'gemini-2.0-flash';
+                const model = 'gemini-1.5-flash';
                 const contents = [
                     {
                         role: 'user',
@@ -131,11 +131,12 @@ export async function POST(req) {
             CourseContent: CourseContent,
         });
     } catch (error) {
-        console.error("API Error:", error);
+        console.error("API Error in course content:", error);
+        const isQuotaExceeded = error.message?.includes('429') || error.message?.toLowerCase().includes('quota');
         return NextResponse.json({ 
-            error: "Failed to generate course content",
+            error: isQuotaExceeded ? "AI Quota Exceeded. Please try again in a few minutes." : "Failed to generate course content",
             details: error.message 
-        }, { status: 500 });
+        }, { status: isQuotaExceeded ? 429 : 500 });
     }
 }
 const YOUTUBE_BASE_URL = "https://www.googleapis.com/youtube/v3/search";

@@ -7,12 +7,17 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useTaskModal } from '@/context/TaskContext';
+import { Sparkles, Calendar as CalendarIcon } from 'lucide-react';
 
 function CourseInfo({course,ViewCourse}) {
 
     const courseLayout = course?.courseJson?.course;
     const [loading,setLoading] = useState(false);
     const router = useRouter();
+    const { openTaskModal, setNewTasksAdded } = useTaskModal();
+    const [aiLoading, setAiLoading] = useState(false);
+
     const GetCourseContent = async () => {
       setLoading(true);
       try{
@@ -36,6 +41,43 @@ function CourseInfo({course,ViewCourse}) {
         } else {
           toast.error("An unexpected error occurred");
         }
+      }
+    }
+
+    const PlanWithAI = async () => {
+      const deadline = prompt("By when do you want to complete this course? (YYYY-MM-DD)", new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
+      if (!deadline) return;
+
+      setAiLoading(true);
+      toast.info("AI is crafting your study plan...");
+
+      try {
+        const response = await axios.post('/api/ai-tasks', {
+          courseTitle: courseLayout?.name,
+          chapters: courseLayout?.chapters,
+          deadline: deadline
+        });
+
+        const newTasks = response.data.tasks.map(t => ({
+          ...t,
+          id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+          status: 'Pending',
+          createdAt: new Date().toISOString()
+        }));
+
+        // Get existing tasks to append
+        const savedTasks = JSON.parse(localStorage.getItem('skillworld_tasks') || '[]');
+        const updatedTasks = [...newTasks, ...savedTasks];
+        localStorage.setItem('skillworld_tasks', JSON.stringify(updatedTasks));
+        
+        setNewTasksAdded(true);
+        setAiLoading(false);
+        toast.success("Study plan generated and added to your Task Manager!");
+        openTaskModal();
+      } catch (error) {
+        console.error(error);
+        setAiLoading(false);
+        toast.error("Failed to generate AI plan. Please try again.");
       }
     }
 
@@ -80,12 +122,24 @@ function CourseInfo({course,ViewCourse}) {
             {!ViewCourse ?
              <Button className='text-lg mx-2 bg-gradient-to-r from-purple-500 to-indigo-500  hover:scale-[1.05] hover:shadow-lg ease-in-out duration-300 md:w-[250px] hover:text-white flex items-center gap-2' onClick={GetCourseContent} disabled={loading}>
             {loading ? <Loader2 className='w-10 h-10 text-purple-500 animate-spin'/> : <BoxIcon/>} Generate Content
-            </Button> : <Link href={`/course/${course?.cid}`}>
+            </Button> : 
+            <div className='flex flex-col md:flex-row gap-3'>
+              <Link href={`/course/${course?.cid}`}>
                 <Button className='text-lg mx-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:scale-[1.05] hover:shadow-lg ease-in-out duration-300 md:w-[250px] hover:text-white flex items-center gap-2'>
                   <PlayCircleIcon/> Continue Learning
                 </Button>
               </Link>
-}
+              <Button 
+                variant="outline"
+                className='text-lg mx-2 border-2 border-violet-500 text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:scale-[1.05] ease-in-out duration-300 md:w-[250px] flex items-center gap-2'
+                onClick={PlanWithAI}
+                disabled={aiLoading}
+              >
+                {aiLoading ? <Loader2 className='w-5 h-5 animate-spin'/> : <Sparkles className='w-5 h-5'/>} 
+                {aiLoading ? 'AI Planning...' : 'Let AI plan my schedule'}
+              </Button>
+            </div>
+          }
           </div>
          
         </motion.div>

@@ -3,11 +3,12 @@
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { UserButton } from '@clerk/nextjs';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GraduationCap, Bell, Search, X, CheckCheck, Trash2 } from 'lucide-react';
+import { GraduationCap, Bell, Search, X, CheckCheck, Trash2, ListTodo } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { useNotifications } from '@/context/NotificationContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { useTaskModal } from '@/context/TaskContext';
 
 const colorMap = {
   violet:  { bg: 'bg-violet-50',  border: 'border-violet-100',  dot: 'bg-violet-500' },
@@ -29,6 +30,7 @@ function AppHeader({ hideSidebar = false }) {
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef = useRef(null);
   const { notifications, unreadCount, markAllRead, markRead, clearAll } = useNotifications();
+  const { toggleTaskModal } = useTaskModal();
 
   // Close panel on outside click
   useEffect(() => {
@@ -101,6 +103,16 @@ function AppHeader({ hideSidebar = false }) {
 
           {/* ── Theme Toggle ── */}
           <ThemeToggle />
+
+          {/* ── Tasks Toggle ── */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={toggleTaskModal}
+            className="w-9 h-9 rounded-xl flex items-center justify-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-violet-50 dark:hover:bg-violet-500/10 hover:border-violet-200 dark:hover:border-violet-500/30 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200"
+          >
+            <ListTodo className="w-4 h-4" />
+          </motion.button>
 
           {/* ── Bell button ── */}
           <div className="relative">

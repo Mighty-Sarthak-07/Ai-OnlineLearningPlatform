@@ -44,7 +44,7 @@ If the question is not related to education, technology, or learning, politely r
 
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const config = { responseMimeType: "text/plain" };
-    const model = "gemini-2.0-flash";
+    const model = "gemini-1.5-flash";
 
     const contents = [
       { role: "user", parts: [{ text: [systemPrompt, message].join("\n\nUser: ") }] }
@@ -56,6 +56,10 @@ If the question is not related to education, technology, or learning, politely r
     return NextResponse.json({ response: text });
   } catch (error) {
     console.error("AI Chat Error:", error);
-    return NextResponse.json({ error: "Failed to process request" }, { status: 500 });
+    const isQuotaExceeded = error.message?.includes('429') || error.message?.toLowerCase().includes('quota');
+    return NextResponse.json({ 
+      error: isQuotaExceeded ? "AI Quota Exceeded. Please try again in a minute." : "Failed to process request",
+      details: error.message 
+    }, { status: isQuotaExceeded ? 429 : 500 });
   }
-} 
+}
