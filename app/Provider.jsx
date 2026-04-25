@@ -6,6 +6,8 @@ import { UserdetailsContext } from '@/context/UserDetailsContext';
 import { SelectedChapterContext } from '@/context/SelectedChapterContext';
 import { NotificationProvider } from '@/context/NotificationContext';
 import NotifyBridge from '@/app/workspace/_components/NotifyBridge';
+import { TaskProvider } from '@/context/TaskContext';
+import TaskManagerModal from '@/app/workspace/_components/TaskManagerModal';
 
 function Provider({children}){
     const {user} = useUser();
@@ -38,10 +40,13 @@ function Provider({children}){
         <UserdetailsContext.Provider value={{userDetails, setUserDetails}}>
             <SelectedChapterContext.Provider value={{selectedChapter, setSelectedChapter}}>
                 <NotificationProvider>
-                    <NotifyBridge />
-                    <div>
-                        {children}
-                    </div>
+                    <TaskProvider>
+                        <NotifyBridge />
+                        <TaskManagerModal />
+                        <div>
+                            {children}
+                        </div>
+                    </TaskProvider>
                 </NotificationProvider>
             </SelectedChapterContext.Provider>
         </UserdetailsContext.Provider>
